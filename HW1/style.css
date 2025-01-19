@@ -1,0 +1,136 @@
+/* Basic Styles */
+body {
+    font-family: 'Playfair Display', serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f8fa; /* Light gray background */
+}
+
+/* Header */
+header {
+    background-color: #0B162A; /* Chicago Bears Blue */
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: sticky; 
+    top: 0;
+    z-index: 1000; /* keeps header above other elements on page */
+}
+
+header h1 {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.nav-links a {
+    color: #C83803; /* Chicago Bears Orange */
+    text-decoration: none;
+    font-size: 1em;
+    padding: 5px 10px;
+    border: 2px solid #C83803; /* Chicago Bears Orange border */
+    border-radius: 3px;
+}
+
+.nav-links a:hover,
+.nav-links a:focus {
+    background-color: #C83803; /* Chicago Bears Orange background on hover */
+    color: white;
+    outline: none; /* Remove outline on focus */
+}
+
+.nav-links a:hover {
+    background-color: #C83803; /* Chicago Bears Orange background on hover */
+    color: white;
+}
+
+/* Parallax Section */
+.parallax {
+    height: 500px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    font-size: 1.5em;
+    border: 3px solid #0B162A; /* Navy Blue border */
+}
+
+/* Hero Section */
+.hero-section {
+    height: 100vh;
+    background-image: url('imgs/ackley.jpg'); /* Landscape Photo I took While Camping */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 20px;
+}
+
+.hero-section h1 {
+    font-size: 2.5em;
+    margin: 0;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.hero-section p {
+    font-size: 1.2em;
+    margin-top: 10px;
+    max-width: 700px;
+    line-height: 1.5;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+/* Life Quote Section */
+.life-quote-section {
+    background-image: url('imgs/Gaming.jpeg'); /* A thematic background image from Adobe Stock */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+/* Content Section */
+.content {
+    padding: 30px;
+    background-color: #ffffff;
+    text-align: center;
+    border: 2px solid #C83803; /* Chicago Bears Orange border */
+    border-radius: 5px; /* Slightly rounded corners */
+    margin: 20px auto;
+    max-width: 700px;
+}
+
+.content h2 {
+    color: #0B162A; /* Chicago Bears Navy Blue */
+    font-size: 1.8em;
+    margin-bottom: 15px;
+}
+
+.content p {
+    font-size: 1em;
+    line-height: 1.5;
+    color: #333;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Footer */
+footer {
+    background-color: #0B162A; /* Chicago Bears Navy Blue */
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-top: 3px solid #C83803; /* Chicago Bears Orange border */
+}
+
