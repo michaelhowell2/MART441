@@ -1,4 +1,4 @@
-/* 🎮 background to black with a video game font */
+/*  background to black with a video game font */
 body {
     background-color: black;
     color: white;
@@ -7,7 +7,7 @@ body {
     font-weight: bold;
 }
 
-/* 🎯 Center the entire game box */
+/*  Center the entire game box */
 .game-box {
     text-align: center;
     width: 80%;
@@ -15,14 +15,14 @@ body {
     margin: 0 auto;
 }
 
-/* ✍️ Center and style the story text */
+/*  Center and style the story text */
 #story {
     font-size: 1.2em;   
     margin: 20px auto;
     line-height: 1.5;
 }
 
-/* 📸 Center and resize the main image */
+/* Center and resize the main image */
 #story-image {
     display: block;
     margin: 20px auto;
@@ -30,19 +30,19 @@ body {
     transition: transform 0.2s ease-in-out, box-shadow 0.3s;/* Smooth animation like in after effect easy ease in and out */
 }
 
-/* 🔍 Clock Image was size I wanted rest too big! */
+/* Clock Image was size I wanted rest too big! */
 #story-image:not([src="imgs/Clock.jpg"]) {
     width: 90%;
     max-width: 750px;
 }
 
-/* ⏰ Keep Clock Image at Full Size */
+/*  Keep Clock Image at Full Size */
 #story-image[src="imgs/Clock.jpg"] {
     width: auto;
     max-width: 100%;
 }
 
-/* 🎮 Center buttons and stack them vertically */
+/* Center buttons and stack them vertically */
 .choices {
     display: flex;
     flex-direction: column;
@@ -50,7 +50,7 @@ body {
     gap: 15px;
 }
 
-/* 🟢 Style buttons */
+/*  Style buttons */
 .choices button {
     background-color: #47ff75; /*Mint green */
     color: black;
@@ -62,7 +62,7 @@ body {
     transition: transform 0.2s, background-color 0.3s;
 }
 
-/* 🔥 Button hover  with red and change to white text . was easier for me to read */
+/* Button hover  with red and change to white text . was easier for me to read */
 .choices button:hover {
     background-color: #ff1e1e;
     color: white;

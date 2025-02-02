@@ -1,0 +1,5 @@
+I copy and pasted your assignment into copilot It created an generic "The Adventure of the Lost Treasure...enter a cave turn right find gold win yay. turn left find dragon die boo. or run away you lose... Lay out was boring and really no life to it. I did not ask for it to add images as it choose not to based on the pasted assignment. It did create a banner around the story text that I liked but really over all it was lacking something.
+
+ I had some issues  getting the images to sit right and load. Also file names of the images etc. Finally got that sorted and the text boxes weren't switiching so I looked up what to do and found innerHTML helped. There probably is another way around all that but I either have'nt learned it yet or forgot. I vaguely remeber doing button last year but couldnt find my old old projects yet. Overall with some tweaking  and painstaking moving things around I like where it sits escpecailly on the mobile. The clock image was perfect but the othere were too big. I had to keep fooling with it.
+
+ I enjoyed this project, in fact I have incorporated SUNKISSER the unicorn story into my MART 340 interactive story assignment.
