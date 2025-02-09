@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Story</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .hidden { display: none; }
+        img { width: 200px; }
+    </style>
+</head>
+<body>
+    <h1>Interactive Story</h1>
+    <div id="story"></div>
+    <button onclick="startStory()">Start Story</button>
+    <button onclick="restartStory()" class="hidden">Restart Story</button>
+    <script>
+        let storyDiv = document.getElementById('story');
+        let restartButton = document.querySelector('.hidden');
+
+        function startStory() {
+            let name = prompt("Enter your name:");
+            storyDiv.innerHTML = `<p>Welcome, ${name}. Your adventure begins now.</p>`;
+            makeDecision(1, name);
+        }
+
+        function makeDecision(stage, name) {
+            switch(stage) {
+                case 1:
+                    storyDiv.innerHTML += `<p>1. Do you want to go to the forest or the village?</p>
+                                           <button onclick="makeDecision(2, '${name}')">Forest</button>
+                                           <button onclick="makeDecision(3, '${name}')">Village</button>`;
+                    break;
+                case 2:
+                    storyDiv.innerHTML += `<p>2. ${name}, you chose the forest. Do you want to follow the path or explore the unknown?</p>
+                                           <button onclick="makeDecision(4, '${name}')">Follow Path</button>
+                                           <button onclick="makeDecision(5, '${name}')">Explore Unknown</button>`;
+                    break;
+                case 3:
+                    storyDiv.innerHTML += `<p>3. ${name}, you chose the village. Do you want to visit the market or the tavern?</p>
+                                           <button onclick="makeDecision(6, '${name}')">Visit Market</button>
+                                           <button onclick="makeDecision(7, '${name}')">Visit Tavern</button>`;
+                    break;
+                case 4:
+                    storyDiv.innerHTML += `<p>4. ${name}, you followed the path and found a hidden treasure!</p>`;
+                    showImage('treasure.jpg');
+                    endStory();
+                    break;
+                case 5:
+                    storyDiv.innerHTML += `<p>5. ${name}, you explored the unknown and encountered a wild beast!</p>`;
+                    showImage('beast.jpg');
+                    endStory();
+                    break;
+                case 6:
+                    storyDiv.innerHTML += `<p>6. ${name}, you visited the market and found rare artifacts!</p>`;
+                    showImage('market.jpg');
+                    endStory();
+                    break;
+                case 7:
+                    storyDiv.innerHTML += `<p>7. ${name}, you visited the tavern and met interesting characters!</p>`;
+                    showImage('tavern.jpg');
+                    endStory();
+                    break;
+                default:
+                    storyDiv.innerHTML += `<p>The end.</p>`;
+                    endStory();
+            }
+        }
+
+        function showImage(imageName) {
+            storyDiv.innerHTML += `<img src="${imageName}" alt="Story Image">`;
+        }
+
+        function endStory() {
+            restartButton.classList.remove('hidden');
+        }
+
+        function restartStory() {
+            storyDiv.innerHTML = '';
+            restartButton.classList.add('hidden');
+            startStory();
+        }
+    </script>
+</body>
+</html>

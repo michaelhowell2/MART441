@@ -1,0 +1,1 @@
+I included the AI folder that I asked Copilot to generate. Again I just copy and pasted your instructions. I gave me back a relatively small story, styraight and to the point. I picked a random name and it just said JOhn you picked go to tavern John you met cool people. The End. SO yeah really boring! It was however helpfull to see how the "case" function worked in the code.

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>Haunted Mansion Adventure</title>
+
+   <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Creepster', cursive; 
+      background-color: #000;
+      color: #c70707;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    
+    #storyDiv {
+      margin: 20px auto;
+      padding: 20px;
+      width: 80%;
+      border: 2px solid #444;
+      background-color: #111;
+      font-size: 40px;
+      min-height: 150px;
+    }
+    #storyImage {
+      display: block;
+      margin: 20px auto;
+      max-width: 90%;
+      height: auto;
+      border: 2px solid #444;
+    }
+    #choiceInput {
+      width: 60%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #submitButton, #restartButton {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    #submitButton:hover, #restartButton:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div id="storyDiv">
+    Welcome to the Haunted Mansion Adventure!<br>
+    Click "Start" to begin your terror-filled journey.
+  </div>
+  <input type="text" id="choiceInput" placeholder="Type your choice here">
+  <button id="submitButton">Submit If You Dare!</button>
+  <button id="restartButton" style="display: none;">Restart</button>
+  <img id="storyImage" src="imgs/Mansion.jpg" alt="Haunted Mansion">
+
+  
+  <script>
+    // Track the current step in the story.
+    let currentStep = 0;
+
+    // Get DOM elements.
+    const storyDiv = document.getElementById('storyDiv');
+    const choiceInput = document.getElementById('choiceInput');
+    const submitButton = document.getElementById('submitButton');
+    const restartButton = document.getElementById('restartButton');
+    const storyImage = document.getElementById('storyImage');
+
+    // Function that returns an image URL based on the current step and choice. Used a mix of Adobe Stock and Firefly Images. Some of the images of Firefly were ok. I'm not well versed in generating photos juust used it some in my Photoshop class last semester.
+    function getHorrorImage(step, choice) {
+      let imgUrl = "imgs/Mansion.jpg";
+      if (step === 1) {
+        imgUrl = "imgs/Mansion.jpg"; // Creepy mansion 
+      } else if (step === 2) {
+        if (choice === "enter") {
+          imgUrl = "imgs/foyer.jpg"; // 
+        } else if (choice === "walk") {
+          imgUrl = "imgs/Grave.jpeg"; // Overgrown graveyard
+        }
+      } else if (step === 3) {
+        if (choice === "approach") {
+          imgUrl = "imgs/Ghost.jpg"; // Scary Ghost
+        } else if (choice === "hide") {
+          imgUrl = "imgs/follow.jpeg"; //Halway creeper follows
+        }
+      } else if (step === 4) {
+        if (choice === "speak") {
+          imgUrl = "imgs/dark past .jpg"; // A ghostly figure appears
+        } else if (choice === "run") {
+          imgUrl = "imgs/evilghost.jpg"; // Running down a dark corridor
+        }
+      } else if (step === 5) {
+        if (choice === "stay") {
+          imgUrl = "imgs/handreach.jpeg"; // Footsteps in the dark
+        } else if (choice === "follow") {
+          imgUrl = "imgs/Rlics.jpg"; // secret room
+        }
+      } else if (step === 6) {
+        if (choice === "investigate") {
+          imgUrl = "imgs/cursed relic.jpg"; //relic
+        } else if (choice === "retreat") {
+          imgUrl = "imgs/mansion door.jpg"; // The mansion door slamming shut
+        }
+      } else if (step === 7) {
+        if (choice === "take") {
+          imgUrl = "imgs/soul.jpg"; // Cursed relic discovered
+        } else if (choice === "leave") {
+          imgUrl = "imgs/Tremble.jpg"; // Leaving the tomb undisturbed
+        }
+      } else if (step === 8) {
+        if (choice === "force") {
+          imgUrl = "imgs/Escape.jpg"; // Forcing the door open
+        } else if (choice === "wait") {
+          imgUrl = "imgs/Gloom.jpg"; // Darkness closing in
+        }
+      }
+      return imgUrl;
+    }
+
+    // Start the horror story.
+    function startHorrorStory() {
+      currentStep = 1;
+      storyDiv.innerHTML = "It is a stormy night. You stand before an old, creaking mansion rumored to be haunted.<br>Do you 'enter' the mansion or 'walk' around it?";
+      storyImage.src = getHorrorImage(1, "");
+      choiceInput.value = "";
+      restartButton.style.display = "none";
+    }
+
+    // flickering lights 
+    function animateFlicker() {
+  console.log("Flickering effect started!");
+
+  let flickerInterval = setInterval(function () {
+    document.body.style.backgroundColor = Math.random() > 0.5 ? "#111" : "#000";
+  }, 150);
+
+  setTimeout(function () {
+    clearInterval(flickerInterval);
+    document.body.style.backgroundColor = "#000";
+    console.log("Flickering stopped.");
+  }, 5000); // Stop after 5 seconds
+}
+
+
+    function processHorrorChoice() {
+      let choice = choiceInput.value.trim().toLowerCase();
+      if (choice === "") {
+        alert("Please enter a choice!");
+        return;
+      }
+      
+      // Use switch to determine the next part of the story.
+      switch (currentStep) {
+        case 1:
+          if (choice === "enter") {
+            storyDiv.innerHTML = "You push open the creaking door and step into a dusty foyer. A faint flickering light down the corridor catches your eye.<br>Do you 'approach' the light or 'hide' in the dark corners?";
+            currentStep = 3;
+            storyImage.src = getHorrorImage(2, "enter");
+            animateFlicker();
+          } else if (choice === "walk") {
+            storyDiv.innerHTML = "You decide to circle the mansion. In the overgrown garden, you discover a graveyard with ancient tombs.<br>Do you 'investigate' a tomb or 'retreat' back towards the mansion?";
+            currentStep = 6;
+            storyImage.src = getHorrorImage(2, "walk");
+          } else {
+            storyDiv.innerHTML = "Invalid choice. Please type 'enter' or 'walk'.";
+          }
+          break;
+        case 3: // Inside the mansion after choosing "enter"
+          if (choice === "approach") {
+            storyDiv.innerHTML = "You walk toward the flickering light. At the corridor’s end, a ghostly figure materializes before you.<br>Do you 'speak' to the apparition or 'run' back in terror?";
+            currentStep = 4;
+            storyImage.src = getHorrorImage(3, "approach");
+          } else if (choice === "hide") {
+            storyDiv.innerHTML = "You hide in the shadows, barely daring to breathe. Suddenly, you hear eerie footsteps drawing near.<br>Do you 'stay' hidden or 'follow' the mysterious sound?";
+            currentStep = 5;
+            storyImage.src = getHorrorImage(3, "hide");
+          } else {
+            storyDiv.innerHTML = "Invalid choice. Please type 'approach' or 'hide'.";
+          }
+          break;
+        case 4: // Ghost
+          if (choice === "speak") {
+            storyDiv.innerHTML = "You address the ghost, and it whispers secrets of the mansion’s dark past. A chill runs down your spine as you realize its tragic fate.<br><strong>THE END.</strong>";
+            storyImage.src = getHorrorImage(4, "speak");
+            endHorrorStory();
+          } else if (choice === "run") {
+            storyDiv.innerHTML = "You sprint back down the corridor, your heart pounding as the ghost’s wail echoes behind you.<br><strong>THE END.</strong>";
+            storyImage.src = getHorrorImage(4, "run");
+            endHorrorStory();
+          } else {
+            storyDiv.innerHTML = "Invalid choice. Please type 'speak' or 'run'.";
+          }
+          break;
+        case 5: // Hidden footsteps 
+          if (choice === "stay") {
+            storyDiv.innerHTML = "You remain hidden, but the footsteps grow louder until a cold hand reaches out from the darkness...<br><strong>THE END.</strong>";
+            storyImage.src = getHorrorImage(5, "stay");
+            endHorrorStory();
+          } else if (choice === "follow") {
+            storyDiv.innerHTML = "Curiosity overcomes you. You follow the mysterious sound and discover a secret room filled with disturbing relics.<br><strong>THE END.</strong>";
+            storyImage.src = getHorrorImage(5, "follow");
+            endHorrorStory();
+          } else {
+            storyDiv.innerHTML = "Invalid choice. Please type 'stay' or 'follow'.";
+          }
+          break;
+        case 6: // Graveyard 
+          if (choice === "investigate") {
+            storyDiv.innerHTML = "You approach an ancient tomb. Its inscription hints at a cursed relic hidden inside.<br>Do you 'take' the relic or 'leave' it undisturbed?";
+            currentStep = 7;
+            storyImage.src = getHorrorImage(6, "investigate");
+          } else if (choice === "retreat") {
+            storyDiv.innerHTML = "As you turn back, the mansion's door slams shut on its own, trapping you inside.<br>Do you try to 'force' the door open or 'wait' for an escape?";
+            currentStep = 8;
+            storyImage.src = getHorrorImage(6, "retreat");
+          } else {
+            storyDiv.innerHTML = "Invalid choice. Please type 'investigate' or 'retreat'.";
+          }
+          break;
+        case 7: // Tomb relic decision
+          if (choice === "take") {
+            storyDiv.innerHTML = "The moment you take the relic, a curse is unleashed. Shadows envelop you as ancient spirits claim your soul.<br><strong>THE END.</strong>";
+            storyImage.src = getHorrorImage(7, "take");
+            endHorrorStory();
+          } else if (choice === "leave") {
+            storyDiv.innerHTML = "You decide to leave the relic undisturbed. For a moment, relief washes over you—but then the ground trembles ominously.<br><strong>THE END.</strong>";
+            storyImage.src = getHorrorImage(7, "leave");
+            endHorrorStory();
+          } else {
+            storyDiv.innerHTML = "Invalid choice. Please type 'take' or 'leave'.";
+          }
+          break;
+        case 8: // Trapped in the mansion branch
+          if (choice === "force") {
+            storyDiv.innerHTML = "With a surge of adrenaline, you force the door open and escape the mansion’s clutches—scarred, but alive.<br><strong>THE END.</strong>";
+            storyImage.src = getHorrorImage(8, "force");
+            endHorrorStory();
+          } else if (choice === "wait") {
+            storyDiv.innerHTML = "You wait in terror as darkness deepens. Hours pass, and soon you are swallowed by the mansion's endless gloom.<br><strong>THE END.</strong>";
+            storyImage.src = getHorrorImage(8, "wait");
+            endHorrorStory();
+          } else {
+            storyDiv.innerHTML = "Invalid choice. Please type 'force' or 'wait'.";
+          }
+          break;
+        default:
+          storyDiv.innerHTML = "An error occurred. Please restart the story.";
+          break;
+      }
+      choiceInput.value = "";
+      animateFlicker();
+    }
+
+    // Ends the story and reveals the restart button
+    function endHorrorStory() {
+      setTimeout(function() {
+        restartButton.style.display = "inline-block";
+      }, 2000);
+    }
+
+    //restart the story using a do-while loop 
+    function restartHorrorStory() {
+      let restartConfirm;
+      do {
+        restartConfirm = prompt("Do you want to restart the horror story? Type 'yes' to restart or 'no' to exit.").toLowerCase();
+      } while (restartConfirm !== "yes" && restartConfirm !== "no");
+
+      if (restartConfirm === "yes") {
+        startHorrorStory();
+      } else {
+        storyDiv.innerHTML = "Farewell, brave soul.";
+        restartButton.style.display = "none";
+      }
+    }
+
+    // Event listeners for buttons.
+    submitButton.addEventListener("click", processHorrorChoice);
+    restartButton.addEventListener("click", restartHorrorStory);
+
+    // Automatically start the story when the page loads.
+    window.onload = startHorrorStory;
+  </script>
+</body>
+</html>
+
+
+
