@@ -1,1 +1,0 @@
-I have attatched the AI response to the assignment. I could not get it to work. I am assuming it is becasue the html is not linked to the js. I also asked copilot to add images and it said it could not. Overall a big fail initially with copilot but i'm sure with more prompts I could get more out of it.
