@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 10px;
+  }
+  .grid img {
+    width: 100px;
+    height: 100px;
+  }
+</style>
+</head>
+<body>
+
+<div class="grid">
+  <script>
+    const gridContainer = document.querySelector('.grid');
+    blankImages.forEach((imgSrc, index) => {
+      const img = document.createElement('img');
+      img.src = imgSrc;
+      img.dataset.index = index;
+      img.addEventListener('click', revealImage);
+      gridContainer.appendChild(img);
+    });
+
+    function revealImage(event) {
+      const index = event.target.dataset.index;
+      event.target.src = actualImages[index];
+    }
+  </script>
+</div>
+
+</body>
+</html>
+
+
+
