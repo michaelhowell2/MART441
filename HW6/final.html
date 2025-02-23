@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Memory Matching Game - Final Score</title>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body onload="displayResults()">
+  <h1>Game Results</h1>
+  <div id="results"></div>
+  
+  <script>
+    function displayResults() {
+      let player = JSON.parse(localStorage.getItem('player'));
+      if (!player) {
+        document.getElementById('results').textContent = "No player data found.";
+        return;
+      }
+      
+      let content = "<p>Name: " + player.firstName + " " + player.lastName + "</p>";
+      content += "<p>Age: " + player.age + "</p>";
+      content += "<p>Attempts: " + player.attempts + "</p>";
+      
+      document.getElementById('results').innerHTML = content;
+    }
+  </script>
+</body>
+</html>

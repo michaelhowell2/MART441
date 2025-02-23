@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Memory Matching Game - Play</title>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body onload="initGame()">
+  <h1>Memory Matching Game</h1>
+ 
+  <div id="gameBoard"></div>
+  <p>Attempts: <span id="attemptCount">0</span></p>
+  
+  <script>
+    // Total number of cards.
+    const totalCards = 12;
+    // Path to the cover image.
+    const blankImagePath = "imgs/cover.png";
+    
+    // Build an array with 12 cover images.
+    const blankArray = new Array(totalCards).fill(blankImagePath);
+    
+    // Array of 6  pet images.
+    const petImages = [
+      'imgs/image1.png',
+      'imgs/image2.png',
+      'imgs/image3.png',
+      'imgs/image4.png',
+      'imgs/image5.png',
+      'imgs/image6.png'
+    ];
+    
+    // Build  images array (12 images: 6 pairs).
+    let actualArray = [];
+    petImages.forEach(img => {
+      actualArray.push(img);
+      actualArray.push(img);
+    });
+    
+    // Shuffle images.
+    actualArray.sort(() => Math.random() - 0.5);
+    
+    // Game state variables.
+    let firstFlipped = null;
+    let secondFlipped = null;
+    let attempts = 0;
+    let matchesFound = 0;
+    
+    function initGame() {
+      const board = document.getElementById('gameBoard');
+      board.innerHTML = "";
+      
+      // Create 12 card elements.
+      for (let i = 0; i < totalCards; i++) {
+        const imgElement = document.createElement('img');
+        imgElement.src = blankArray[i];
+        imgElement.id = 'img' + i;
+        imgElement.style.cursor = "pointer";
+        // Attach a click event to flip the card.
+        imgElement.addEventListener('click', function() {
+          flipCard(i);
+        });
+        board.appendChild(imgElement);
+      }
+    }
+    
+    function flipCard(index) {
+      const card = document.getElementById('img' + index);
+      
+      // Prevent flipping if the card is already revealed.
+      if (card.src.indexOf("cover.png") === -1) {
+        console.log("Card already revealed, ignoring click:", index);
+        return;
+      }
+      
+      // Reveal the card.
+      card.src = actualArray[index];
+      
+      // If no card is flipped yet, record this as the first.
+      if (firstFlipped === null) {
+        firstFlipped = { index: index, img: actualArray[index] };
+        console.log("First card flipped:", firstFlipped);
+      } 
+      // Only allow a second flip if a different card is clicked.
+      else if (secondFlipped === null && index !== firstFlipped.index) {
+        secondFlipped = { index: index, img: actualArray[index] };
+        attempts++;
+        document.getElementById('attemptCount').textContent = attempts;
+        console.log("Second card flipped:", secondFlipped);
+        // Check for a match after a short delay.
+        setTimeout(checkMatch, 800);
+      }
+    }
+    
+    function checkMatch() {
+      console.log("Checking match:", firstFlipped, secondFlipped);
+      
+      if (firstFlipped.img === secondFlipped.img) {
+        matchesFound += 2;
+        console.log(`Match found! Total matches: ${matchesFound}`);
+        
+        // If all cards are matched, update player data and redirect.
+        if (matchesFound === totalCards) {
+          console.log("All matches found! Finishing game...");
+          let player = JSON.parse(localStorage.getItem('player'));
+          if (player) {
+            player.attempts = attempts;
+            localStorage.setItem('player', JSON.stringify(player));
+           // console.log("Player data updated. Redirecting...");
+          } else {
+            console.error("Player data not found in local storage.");
+          }
+          // Use a short delay before redirection.
+          setTimeout(function() {
+            window.location.href = "final.html";  //rdirect to final.
+          }, 500);
+        }
+      } else {
+        // No match; flip cards back over.
+        console.log("No match. Flipping cards back over.");
+        document.getElementById('img' + firstFlipped.index).src = blankImagePath;
+        document.getElementById('img' + secondFlipped.index).src = blankImagePath;
+      }
+      
+      // Reset for next attempt.
+      firstFlipped = null;
+      secondFlipped = null;
+    }
+  </script>
+</body>
+</html>
