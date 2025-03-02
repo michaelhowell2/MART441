@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> ViewMaster</title>
+    <style>
+        .viewer {
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+        }
+        .image-display {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="viewer">
+        <h1>Virtual ViewMaster</h1>
+        <img id="displayImage" class="image-display" src="" alt="ViewMaster Image">
+        <h2 id="title"></h2>
+        <p id="description"></p>
+        <p id="author"></p>
+        <p id="year"></p>
+        <button onclick="showRandomSlide()">Next Slide</button>
+    </div>
+
+    <script>
+        // Slide class definition
+        class ViewMasterSlide {
+            constructor(title, imageUrl, description, author, year) {
+                this.title = title;
+                this.imageUrl = imageUrl;
+                this.description = description;
+                this.author = author;
+                this.year = year;
+            }
+        }
+
+        // Create slide objects
+        const slide1 = new ViewMasterSlide(
+            "Social Justice",
+            "AdobeStock_283348206.jpeg",
+            "Word Map od Social Justice.",
+            "Laufer Adobe Stock",
+            2024
+        );
+
+        const slide2 = new ViewMasterSlide(
+            "Protest for Social Justice",
+            "AdobeStock_429453940.jpeg",
+            "Hand drawing and protest Concepts of social problems.",
+            " Sansert Adobe Stock",
+            2024
+        );
+
+        const slide3 = new ViewMasterSlide(
+            "Activisim",
+            "AdobeStock_417421361.jpeg",
+            "Activist leading a crowd of people.",
+            " Sylverarts  Adobe Stock",
+            2024
+        );
+
+        const slide4 = new ViewMasterSlide(
+            "Diversity Inclusion Equality",
+            "AdobeStock_423655347.jpeg",
+            "Diversity inclusion equality lettering. Text. Diversity, Age, Ethnicity, Sexual Orientation, Gender, Religion. Equal rights social concept..",
+            " anna.stasiia Adobe Stock",
+            2024
+        );
+
+        const slide5 = new ViewMasterSlide(
+            "Social Justice Mind Map ",
+            "AdobeStock_373632174.jpeg",
+            "Social justice mind map, concept for presentations and reports.",
+            " dizain  Adobe Stock",
+            2024
+        );
+
+        // Store slides in array
+        const slides = [slide1, slide2, slide3, slide4, slide5];
+
+        // Function to display random slide
+        function showRandomSlide() {
+            const randomIndex = Math.floor(Math.random() * slides.length);
+            const slide = slides[randomIndex];
+
+            // Update display elements
+            document.getElementById('displayImage').src = slide.imageUrl;
+            document.getElementById('title').textContent = slide.title;
+            document.getElementById('description').textContent = slide.description;
+            document.getElementById('author').textContent = `Artist: ${slide.author}`;
+            document.getElementById('year').textContent = `Accessed: ${slide.year}`;
+        }
+
+        // Show first slide on page load
+        window.onload = showRandomSlide;
+    </script>
+</body>
+</html>
