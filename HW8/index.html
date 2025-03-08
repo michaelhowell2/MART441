@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Having Fun with Poe and JQuery</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="icon" type="image/x-icon" href="data:,">
+    <link rel="icon" type="image/x-icon" href="data:,"> <!-- Added to stop favicon request -->
     <style>
         body {
             margin: 0;
@@ -22,8 +22,8 @@
         }
         #imageContainer img {
             display: none;
-            max-width: 300px;
-            max-height: 300px;
+            max-width: 300px; /* Ensures images don’t exceed 300px wide */
+            max-height: 300px; /* Ensures images don’t exceed 300px tall */
         }
         #textContainer {
             position: absolute;
@@ -35,7 +35,7 @@
             text-align: center;
             max-width: 600px;
             line-height: 1.5;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /*  shadow for readability */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
         }
         .shape {
             position: absolute;
@@ -49,7 +49,6 @@
 
     <script>
         $(document).ready(function() {
-            // A tribute to Edgar Allan Poe with rotating quotes, images, and animated shapes
             const images = [
                 'imgs/Poe.png',
                 'imgs/raven.jpg',
@@ -70,17 +69,14 @@
             let currentTextIndex = 0;
             let currentShapeIndex = 0;
 
-            
             const maxWidth = $(window).width() - 60;
             const maxHeight = $(window).height() - 60;
 
-            // Preload images into the container
             images.forEach((src, index) => {
                 const img = $('<img>').attr('src', src).attr('id', 'img' + index);
                 $('#imageContainer').append(img);
             });
 
-            // Function to rotate images
             function rotateImages() {
                 $('#img' + currentImageIndex).fadeOut(1000, function() {
                     currentImageIndex = (currentImageIndex + 1) % images.length;
@@ -88,7 +84,6 @@
                 });
             }
 
-            // Function to rotate text
             function rotateText() {
                 $('#textContainer').animate({ fontSize: '20px', opacity: 0 }, 1000, function() {
                     $(this).html(texts[currentTextIndex]);
@@ -97,7 +92,6 @@
                 });
             }
 
-            // Function to create and animate shapes
             function animateShape() {
                 const shapeData = shapes[currentShapeIndex];
                 const $shape = $('<' + shapeData.type + '>').addClass(shapeData.class).css(shapeData.css);
@@ -119,14 +113,12 @@
                 currentShapeIndex = (currentShapeIndex + 1) % shapes.length;
             }
 
-            // Initial setup
             $('#img0').show();
             $('#textContainer').html(texts[0]).css({ fontSize: '30px', opacity: 1 });
 
-            // Set intervals for rotations
-            setInterval(rotateImages, 4000); // Images every 4 seconds
-            setInterval(rotateText, 3000);   // Text every 3 seconds
-            setInterval(animateShape, 3500); // Shapes every 3.5 seconds 
+            setInterval(rotateImages, 4000);
+            setInterval(rotateText, 3000);
+            setInterval(animateShape, 3500);
         });
     </script>
 </body>
