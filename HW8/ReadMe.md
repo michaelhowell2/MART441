@@ -1,1 +1,1 @@
-Wasn't too bad No issues 
+Wasn't too bad No issues. Ok I lied I cant view this live using pages i get thhis error Content-Security-Policy: The page’s settings blocked the loading of a resource (img-src) at https://michaelhowell2.github.io/favicon.ico because it violates the following directive: “img-src data:” 2 FaviconLoader.sys.mjs:175:20 I've never ran into this before..
