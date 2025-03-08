@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Having Fun with Poe and JQuery</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #3c2f2f; 
+            position: relative;
+            height: 100vh;
+        }
+        #imageContainer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #imageContainer img {
+            display: none;
+            max-width: 300px;
+            max-height: 300px;
+        }
+        #textContainer {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.5;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /*  shadow for readability */
+        }
+        .shape {
+            position: absolute;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="imageContainer"></div>
+    <div id="textContainer"></div>
+
+    <script>
+        $(document).ready(function() {
+            // A tribute to Edgar Allan Poe with rotating quotes, images, and animated shapes
+            const images = [
+                'imgs/Poe.png',
+                'imgs/raven.jpg',
+                'imgs/elenor.jpg'
+            ];
+            const texts = [
+                "“I became insane, with long intervals of horrible sanity.”<br>― Edgar Allan Poe",
+                "Much I marveled this ungainly fowl to hear discourse so plainly,<br>Though its answer little meaning—little relevancy bore;<br>For we cannot help agreeing that no living human being<br>Ever yet was blest with seeing bird above his chamber door—<br>Bird or beast upon the sculptured bust above his chamber door,<br>With such name as \"Nevermore.\"",
+                "Hand in hand about this valley, for fifteen years, roamed I with Eleonora<br>before Love entered within our hearts."
+            ];
+            const shapes = [
+                { type: 'div', class: 'shape circle', css: { width: '75px', height: '75px', backgroundColor: 'black', borderRadius: '50%' } },
+                { type: 'div', class: 'shape square', css: { width: '60px', height: '60px', backgroundColor: '#4b0082' } },
+                { type: 'div', class: 'shape triangle', css: { width: '0', height: '0', borderLeft: '50px solid transparent', borderRight: '50px solid transparent', borderBottom: '70px solid white' } }
+            ];
+
+            let currentImageIndex = 0;
+            let currentTextIndex = 0;
+            let currentShapeIndex = 0;
+
+            
+            const maxWidth = $(window).width() - 60;
+            const maxHeight = $(window).height() - 60;
+
+            // Preload images into the container
+            images.forEach((src, index) => {
+                const img = $('<img>').attr('src', src).attr('id', 'img' + index);
+                $('#imageContainer').append(img);
+            });
+
+            // Function to rotate images
+            function rotateImages() {
+                $('#img' + currentImageIndex).fadeOut(1000, function() {
+                    currentImageIndex = (currentImageIndex + 1) % images.length;
+                    $('#img' + currentImageIndex).fadeIn(1000);
+                });
+            }
+
+            // Function to rotate text
+            function rotateText() {
+                $('#textContainer').animate({ fontSize: '20px', opacity: 0 }, 1000, function() {
+                    $(this).html(texts[currentTextIndex]);
+                    currentTextIndex = (currentTextIndex + 1) % texts.length;
+                    $(this).animate({ fontSize: '30px', opacity: 1 }, 1000);
+                });
+            }
+
+            // Function to create and animate shapes
+            function animateShape() {
+                const shapeData = shapes[currentShapeIndex];
+                const $shape = $('<' + shapeData.type + '>').addClass(shapeData.class).css(shapeData.css);
+                $('body').append($shape);
+
+                const startX = Math.random() * maxWidth;
+                const startY = Math.random() * maxHeight;
+
+                $shape.css({ left: startX, top: startY, opacity: 1 })
+                    .animate({
+                        left: Math.random() * maxWidth,
+                        top: Math.random() * maxHeight
+                    }, 2000, function() {
+                        $shape.fadeOut(1000, function() {
+                            if ($shape.length) $shape.remove(); 
+                        });
+                    });
+
+                currentShapeIndex = (currentShapeIndex + 1) % shapes.length;
+            }
+
+            // Initial setup
+            $('#img0').show();
+            $('#textContainer').html(texts[0]).css({ fontSize: '30px', opacity: 1 });
+
+            // Set intervals for rotations
+            setInterval(rotateImages, 4000); // Images every 4 seconds
+            setInterval(rotateText, 3000);   // Text every 3 seconds
+            setInterval(animateShape, 3500); // Shapes every 3.5 seconds 
+        });
+    </script>
+</body>
+</html>
