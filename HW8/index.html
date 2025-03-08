@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Explicit CSP to allow your images and ignore favicon fro GPT -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://code.jquery.com; img-src 'self' data:;">
     <title>Having Fun with Poe and JQuery</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Empty favicon to suppress request from GPT -->
-    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,">
+    <link rel="icon" href="data:,"> <!-- Simplest favicon suppression -->
     <style>
         body {
             margin: 0;

@@ -81,4 +81,6 @@ Why It Works Locally but Not on GitHub Pages
 
 Final Fix for GitHub Pages
 
-Since you don’t need a favicon for your assignment and the data:, trick isn’t fully working, let’s combine it with a CSP override and ensure GitHub Pages respects it. We’ll also double-check deployment to rule out caching issues."
+Since you don’t need a favicon for your assignment and the data:, trick isn’t fully working, let’s combine it with a CSP override and ensure GitHub Pages respects it. We’ll also double-check deployment to rule out caching issues." 
+
+After all that It works live. SO I learned abit using GPT...
