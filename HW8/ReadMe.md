@@ -83,4 +83,4 @@ Final Fix for GitHub Pages
 
 Since you don’t need a favicon for your assignment and the data:, trick isn’t fully working, let’s combine it with a CSP override and ensure GitHub Pages respects it. We’ll also double-check deployment to rule out caching issues." 
 
-After all that It works live. SO I learned abit using GPT...
+After all that It works live. SO I learned abit using GPT...Ok I lied now it worked fine in Pages but not VScode now. SO after back and forthing trting to have GPT assist me I'm back to square 1 so this is not working on GitHub Pages sorry about that.
