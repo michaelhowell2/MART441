@@ -1,0 +1,1 @@
+I just did simple stuff here. Grabbed Github Emojis dataset. I tried to grab tv episodes but the 3 i grabbed all said null in the dataset so i settled for the emoji's. My "plugin" is a pretty basic enlarge object on hover. Used css to center all and added a splash of dark purple in background. 
