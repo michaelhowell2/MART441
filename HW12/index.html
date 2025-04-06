@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Evil Pac-Man Game</title>
+    <style>
+        canvas {
+            border: 5px solid black;
+            display: none; /* Hide canvas until game starts */
+        }
+        #startButton {
+            font-size: 24px;
+            padding: 10px 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #scoreDisplay {
+            display: none; /* Hide score until game starts */
+        }
+        
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+</head>
+</head>
+<body>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="scoreDisplay">Ghosts Eaten: <span id="score">0</span></div>
+    <button id="startButton">Start Game</button>
+
+    <!-- Audio -->
+    <audio id="introSound">
+        <source src="assets/sound/intro.wav" type="audio/wav">
+    </audio>
+    <audio id="backgroundMusic" loop>
+        <source src="assets/sound/background.wav" type="audio/wav">
+    </audio>
+    <audio id="screamSound">
+        <source src="assets/sound/scream.mp3" type="audio/mp3">
+    </audio>
+    <audio id="chompSound" loop>
+        <source src="assets/sound/pac.wav" type="audio/wav">
+    </audio>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
