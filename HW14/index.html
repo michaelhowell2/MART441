@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groovy Three.js Scene – Beat‑Synced FX</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: linear-gradient(to right, #8e2de2, #4a00e0); }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "./js/three.js-master/build/three.module.js",
+                "three/addons/": "./js/three.js-master/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module">
+        /* ======================= AUDIO + BEAT ANALYSIS ======================= */
+        const audio = new Audio('./audio/770195__universfield__positive-funk-groove.mp3');
+        audio.loop = true;
+        let ctxAudio, analyser, dataArray;
+        window.addEventListener('click', async () => {
+            if (!ctxAudio) {
+                ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+                const src = ctxAudio.createMediaElementSource(audio);
+                analyser = ctxAudio.createAnalyser();
+                analyser.fftSize = 256;
+                src.connect(analyser);
+                analyser.connect(ctxAudio.destination);
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+            }
+            await audio.play();
+        }, { once: true });
+
+        /* =========================== THREE BASICS =========================== */
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x1e003e);
+
+        const aspect = window.innerWidth / window.innerHeight;
+        const d = 5;
+        const camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, 1, 1000);
+        camera.position.set(0, 5, 10);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        /* ============================== LIGHTS ============================== */
+        scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+        const discoLights = [];
+        const lightRadius = 4;
+        for (let i = 0; i < 4; i++) {
+            const pl = new THREE.PointLight(0xffffff, 1.2, 12, 2);
+            scene.add(pl);
+            discoLights.push(pl);
+        }
+
+        /* ============================ GEOMETRY ============================= */
+        const torusKnot = new THREE.Mesh(
+            new THREE.TorusKnotGeometry(1, 0.3, 100, 16),
+            new THREE.MeshStandardMaterial({ color: 0xff44cc, roughness: 0.2, metalness: 1 })
+        );
+        torusKnot.position.set(-2, 0, 0);
+        scene.add(torusKnot);
+
+        const icosahedron = new THREE.Mesh(
+            new THREE.IcosahedronGeometry(0.8, 2),
+            new THREE.MeshNormalMaterial({ flatShading: true })
+        );
+        icosahedron.position.set(2, 0, 0);
+        scene.add(icosahedron);
+
+        const icoWire = new THREE.LineSegments(
+            new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(0.82, 2)),
+            new THREE.LineBasicMaterial({ color: 0xffffff })
+        );
+        icoWire.position.copy(icosahedron.position);
+        scene.add(icoWire);
+
+        /* ============================ BOOMBOX ============================== */
+        const loader = new GLTFLoader();
+        let boombox;
+        loader.load('./js/three.js-master/examples/models/gltf/BoomBox.glb', g => {
+            boombox = g.scene;
+            boombox.scale.set(40, 40, 40);
+            boombox.position.set(3, 0.35, -2);
+            boombox.rotation.y = Math.PI / 4;
+            scene.add(boombox);
+        });
+
+        /* ============================ TITLE BOX ============================ */
+        const titleCanvas = document.createElement('canvas');
+        titleCanvas.width = 2048;
+        titleCanvas.height = 256;
+        const ctx = titleCanvas.getContext('2d');
+        const grad = ctx.createLinearGradient(0, 0, titleCanvas.width, 0);
+        grad.addColorStop(0, '#ff00cc');
+        grad.addColorStop(1, '#3333ff');
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, titleCanvas.width, titleCanvas.height);
+        ctx.fillStyle = grad;
+        ctx.font = 'bold 80px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('Far Out and Groovy - Michael Howell', titleCanvas.width / 2, titleCanvas.height / 2);
+        const textBox = new THREE.Mesh(
+            new THREE.BoxGeometry(10, 1.25, 0.5),
+            [ new THREE.MeshStandardMaterial({ color: 0x111111 }),
+              new THREE.MeshStandardMaterial({ color: 0x111111 }),
+              new THREE.MeshStandardMaterial({ color: 0x111111 }),
+              new THREE.MeshStandardMaterial({ color: 0x111111 }),
+              new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(titleCanvas), transparent: true }),
+              new THREE.MeshStandardMaterial({ color: 0x111111 }) ]
+        );
+        textBox.position.set(0, 3.5, 0);
+        scene.add(textBox);
+
+        /* ============================ STARFIELD ============================ */
+        const starCount = 200;
+        const starPos = new Float32Array(starCount * 3);
+        const starCol = new Float32Array(starCount * 3);
+        for (let i = 0; i < starCount; i++) {
+            starPos[i*3]   = (Math.random() - 0.5) * 20;
+            starPos[i*3+1] = (Math.random() - 0.5) * 20;
+            starPos[i*3+2] = (Math.random() - 0.5) * 20;
+            starCol[i*3]   = Math.random();
+            starCol[i*3+1] = Math.random();
+            starCol[i*3+2] = Math.random();
+        }
+        const starGeo = new THREE.BufferGeometry();
+        starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+        starGeo.setAttribute('color', new THREE.BufferAttribute(starCol, 3));
+        scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ size: 0.1, vertexColors: true })));
+
+        /* ============================ LASERS ============================== */
+        const lasers = [];
+        const laserGeo = new THREE.CylinderGeometry(0.15, 0.15, 8, 12, 1, true);
+        laserGeo.rotateX(Math.PI / 2);
+        function spawnLaser() {
+            const mat = new THREE.MeshBasicMaterial({
+                color: new THREE.Color().setHSL(Math.random(), 1, 0.7),
+                transparent: true,
+                opacity: 0.9,
+                blending: THREE.AdditiveBlending,
+                side: THREE.DoubleSide
+            });
+            const beam = new THREE.Mesh(laserGeo, mat);
+            beam.position.set(0, 1, -5);
+            scene.add(beam);
+            lasers.push(beam);
+        }
+
+        /* ============================ CONTROLS ============================ */
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableZoom = false;
+
+        /* ======================== ANIMATION LOOP ========================= */
+        let lastBeat = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            const t = Date.now();
+
+            /* ---- Beat detection ---- */
+            if (analyser) {
+                analyser.getByteFrequencyData(dataArray);
+                const avg = dataArray.reduce((s, v) => s + v, 0) / dataArray.length;
+                if (avg > 120 && t - lastBeat > 250) {
+                    lastBeat = t;
+                    discoLights.forEach(pl => pl.intensity = 2.5);
+                    setTimeout(() => discoLights.forEach(pl => pl.intensity = 1.2), 100);
+                    spawnLaser();
+                }
+            }
+
+            /* ---- Update lasers ---- */
+            for (let i = lasers.length - 1; i >= 0; i--) {
+                const beam = lasers[i];
+                beam.position.z += 0.5;
+                const pulse = 1 + Math.sin(t * 0.02 + beam.position.z) * 0.4;
+                beam.scale.set(pulse, pulse, 1);
+                beam.material.opacity *= 0.96;
+                if (beam.material.opacity < 0.05 || beam.position.z > 7) {
+                    scene.remove(beam);
+                    lasers.splice(i, 1);
+                }
+            }
+
+            /* ---- Geometry & text animations ---- */
+            torusKnot.rotation.x += 0.01;
+            torusKnot.rotation.y += 0.01;
+
+            icosahedron.rotation.x += 0.01;
+            icosahedron.rotation.y += 0.01;
+            icoWire.rotation.copy(icosahedron.rotation);
+            const icoScale = 1 + Math.sin(t * 0.003) * 0.15;
+            icosahedron.scale.setScalar(icoScale);
+            icoWire.scale.setScalar(icoScale);
+            icoWire.material.color.setHSL((t * 0.0003) % 1, 1, 0.5);
+
+            textBox.position.y = 3.5 + Math.sin(t * 0.002) * 0.2;
+
+            if (boombox) {
+                const s = 1 + Math.sin(t * 0.008) * 0.08;
+                boombox.scale.setScalar(40 * s);
+                boombox.rotation.y += 0.01;
+            }
+
+            discoLights.forEach((pl, i) => {
+                const angle = t * 0.0006 + (i * Math.PI * 2) / discoLights.length;
+                pl.position.set(3 + Math.cos(angle) * lightRadius, 1.5, -2 + Math.sin(angle) * lightRadius);
+                pl.color.setHSL(((t * 0.04 + i * 90) % 360) / 360, 1, 0.6);
+            });
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        /* ========================= RESIZE HANDLER ========================= */
+        window.addEventListener('resize', () => {
+            const a = window.innerWidth / window.innerHeight;
+            camera.left = -d * a;
+            camera.right = d * a;
+            camera.top = d;
+            camera.bottom = -d;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
