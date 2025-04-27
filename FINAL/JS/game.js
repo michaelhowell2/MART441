@@ -1,10 +1,5 @@
 const titleScreen = document.getElementById('title-screen');
 const startButton = document.getElementById('start-button');
-const settingsButton = document.getElementById('settings-button');
-const fullscreenButton = document.getElementById('fullscreen-button');
-const settingsPanel = document.getElementById('settings-panel');
-const deviceMode = document.getElementById('device-mode');
-const saveSettings = document.getElementById('save-settings');
 const gameContainer = document.getElementById('game-container');
 const flashOverlay = document.getElementById('flash-overlay');
 const dialogueBox = document.getElementById('dialogue-box');
@@ -41,72 +36,6 @@ const soundMap = {
   badEnding: badEndingSound
 };
 
-// Device detection
-function detectDevice() {
-  const isMobile = window.innerWidth <= 600 || 
-                   ('ontouchstart' in window && navigator.maxTouchPoints > 0) ||
-                   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  console.log(`Device detection: width=${window.innerWidth}, touch=${navigator.maxTouchPoints}, userAgent=${navigator.userAgent}, isMobile=${isMobile}`);
-  return isMobile ? 'mobile' : 'pc';
-}
-
-// Apply device mode
-function applyDeviceMode(mode) {
-  if (mode === 'auto') {
-    mode = detectDevice();
-  }
-  console.log(`Applying device mode: ${mode}`);
-  document.body.setAttribute('data-device', mode);
-  localStorage.setItem('deviceMode', mode);
-}
-
-// Full-screen toggle
-function toggleFullScreen() {
-  console.log('Toggling full-screen');
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen().catch(err => {
-      console.error('Failed to enter fullscreen:', err);
-    });
-  } else {
-    document.exitFullscreen().catch(err => {
-      console.error('Failed to exit fullscreen:', err);
-    });
-  }
-}
-
-// Initialize device mode
-localStorage.removeItem('deviceMode'); // Clear to avoid stuck settings
-const savedMode = localStorage.getItem('deviceMode') || 'auto';
-applyDeviceMode(savedMode);
-deviceMode.value = savedMode;
-
-// Settings panel handlers
-const toggleSettings = (event) => {
-  event.preventDefault();
-  console.log(`Touch/click detected on settingsButton, eventType=${event.type}`);
-  settingsPanel.style.display = settingsPanel.style.display === 'none' ? 'flex' : 'none';
-};
-settingsButton.addEventListener('click', toggleSettings);
-settingsButton.addEventListener('touchstart', toggleSettings, { passive: false });
-
-const saveSettingsHandler = (event) => {
-  event.preventDefault();
-  console.log(`Touch/click detected on saveSettings, eventType=${event.type}`);
-  applyDeviceMode(deviceMode.value);
-  settingsPanel.style.display = 'none';
-};
-saveSettings.addEventListener('click', saveSettingsHandler);
-saveSettings.addEventListener('touchstart', saveSettingsHandler, { passive: false });
-
-// Full-screen handler
-const fullscreenHandler = (event) => {
-  event.preventDefault();
-  console.log(`Touch/click detected on fullscreenButton, eventType=${event.type}`);
-  toggleFullScreen();
-};
-fullscreenButton.addEventListener('click', fullscreenHandler);
-fullscreenButton.addEventListener('touchstart', fullscreenHandler, { passive: false });
-
 async function loadScript() {
   try {
     const response = await fetch('json/script.json?' + new Date().getTime());
@@ -120,8 +49,6 @@ async function loadScript() {
     script = await response.json();
     console.log('Script loaded successfully:', script);
     console.log(`Script length: ${script.length}`);
-    console.log('First few scenes:', script.slice(0, 3));
-    console.log('Last scene:', script[script.length - 1]);
   } catch (err) {
     console.error('Failed to load script.json:', err);
     alert('Failed to load game script. Please check if json/script.json exists and is valid JSON.');
@@ -188,13 +115,10 @@ function showChoices(choices) {
       const btn = document.createElement('button');
       btn.className = 'choice-btn';
       btn.textContent = choice.text;
-      const handler = (event) => {
-        event.preventDefault();
-        console.log(`Touch/click detected on choice-btn: ${choice.text}, next scene: ${choice.next}, eventType=${event.type}`);
+      btn.onclick = () => {
+        console.log(`Choice clicked: ${choice.text}, next scene: ${choice.next}`);
         loadScene(choice.next);
       };
-      btn.addEventListener('click', handler);
-      btn.addEventListener('touchstart', handler, { passive: false });
       choicesDiv.appendChild(btn);
     });
   }
@@ -217,13 +141,10 @@ function debounceClick(handler) {
   return function(event) {
     const now = Date.now();
     if (now - lastClickTime < 100) {
-      console.log(`Touch/click ignored: debounce, eventType=${event.type}`);
+      console.log('Click ignored due to debounce');
       return;
     }
     lastClickTime = now;
-    if (event.type === 'touchstart') {
-      event.preventDefault();
-    }
     handler(event);
   };
 }
@@ -271,30 +192,22 @@ function loadScene(sceneIndex) {
 
     if (scene.choices) {
       dialogueBox.onclick = null;
-      dialogueBox.ontouchstart = null;
       setTimeout(() => {
         showChoices(scene.choices);
-        const choiceHandler = debounceClick(() => {
-          console.log('Dialogue box clicked/tapped, but choices are active');
+        dialogueBox.onclick = debounceClick(() => {
+          console.log('Dialogue box clicked, but choices are active');
         });
-        dialogueBox.onclick = choiceHandler;
-        dialogueBox.ontouchstart = choiceHandler;
       }, 800);
     } else {
-      const clickHandler = debounceClick((event) => {
+      dialogueBox.onclick = debounceClick(() => {
         if (typing || transitionLock) {
-          console.log(`Touch/click ignored: typing=${typing}, transitioning=${transitionLock}, eventType=${event.type}`);
+          console.log('Click ignored: typing or transitioning');
           return;
         }
         if (scene.next !== undefined) {
-          console.log(`Dialogue box touch/click advancing to scene: ${scene.next}`);
           loadScene(scene.next);
         }
       });
-      dialogueBox.onclick = clickHandler;
-      dialogueBox.ontouchstart = clickHandler;
-      dialogueBox.addEventListener('click', clickHandler);
-      dialogueBox.addEventListener('touchstart', clickHandler, { passive: false });
     }
 
     fadeIn();
@@ -333,29 +246,20 @@ function startGame() {
 }
 
 // Initialize
-const startHandler = (event) => {
-  event.preventDefault();
-  console.log(`Start button touch/click detected, eventType=${event.type}, device=${document.body.getAttribute('data-device')}`);
-  loadScript().then(() => {
-    if (script.length === 0) {
-      console.error('Game cannot start: script failed to load');
-      alert('Game cannot start: script failed to load. Please check json/script.json.');
-      return;
-    }
-    titleScreen.style.display = 'none';
-    gameContainer.style.display = 'flex';
-    setTimeout(toggleFullScreen, 100); // Delay full-screen to avoid touch conflicts
-    bgMusic.play().catch(err => console.log('Music blocked:', err));
-    startGame();
-  });
+startButton.onclick = async () => {
+  await loadScript();
+  if (script.length === 0) {
+    console.error('Game cannot start: script failed to load');
+    alert('Game cannot start: script failed to load. Please check json/script.json.');
+    return;
+  }
+  titleScreen.style.display = 'none';
+  gameContainer.style.display = 'flex';
+  bgMusic.play().catch(err => console.log('Music blocked:', err));
+  startGame();
 };
-startButton.addEventListener('click', startHandler);
-startButton.addEventListener('touchstart', startHandler, { passive: false });
 
-const resetHandler = (event) => {
-  event.preventDefault();
-  console.log(`Touch/click detected on resetButton, eventType=${event.type}`);
-  setTimeout(toggleFullScreen, 100);
+resetButton.onclick = () => {
   victorySound.pause();
   badEndingSound.pause();
   victorySound.currentTime = 0;
@@ -368,5 +272,3 @@ const resetHandler = (event) => {
   currentScene = 0;
   startGame();
 };
-resetButton.addEventListener('click', resetHandler);
-resetButton.addEventListener('touchstart', resetHandler, { passive: false });

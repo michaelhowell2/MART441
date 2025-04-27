@@ -2,44 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Whispers in the Hollow</title>
   <link rel="stylesheet" href="styles/styles.css">
 </head>
-<body data-device="pc"> <!-- Default to PC, updated by JS -->
-  <div class="game-wrapper">
-    <!-- Title Screen -->
-    <div id="title-screen">
-      <div id="title-text">Whispers in the Hollow</div>
-      <button id="start-button">Start Game</button>
-      <button id="fullscreen-button">Full Screen</button>
-      <button id="settings-button">Settings</button>
-      <div id="settings-panel" style="display: none;">
-        <label for="device-mode">Device Mode:</label>
-        <select id="device-mode">
-          <option value="auto">Auto</option>
-          <option value="pc">PC</option>
-          <option value="mobile">Mobile</option>
-        </select>
-        <button id="save-settings">Save</button>
-      </div>
-    </div>
+<body>
+  <!-- Title Screen -->
+  <div id="title-screen">
+    <div id="title-text">Whispers in the Hollow</div>
+    <button id="start-button">Start Game</button>
+  </div>
 
-    <!-- Game -->
-    <div id="game-container">
-      <div id="flash-overlay"></div>
-      <div id="dialogue-box">
-        <p id="dialogue-text"></p>
-        <div id="continue-hint">(Tap or click to continue)</div>
-      </div>
-      <div id="choices"></div>
+  <!-- Game -->
+  <div id="game-container">
+    <div id="flash-overlay"></div>
+    <div id="dialogue-box">
+      <p id="dialogue-text"></p>
+      <div id="continue-hint">(Click to continue)</div>
     </div>
+    <div id="choices"></div>
+  </div>
 
-    <!-- Game Over Screen -->
-    <div id="game-over-screen">
-      <div id="game-over-text">Game Over</div>
-      <button id="reset-button">Reset</button>
-    </div>
+  <!-- Game Over Screen -->
+  <div id="game-over-screen">
+    <div id="game-over-text">Game Over</div>
+    <button id="reset-button">Reset</button>
   </div>
 
   <!-- Audio -->
@@ -52,7 +38,6 @@
   <audio id="escape-sound" src="assets/audio/383073__pfranzen__running-away-on-solid-floor.ogg"></audio>
   <audio id="victory-sound" src="assets/audio/monumental-victory-114090.mp3"></audio>
   <audio id="bad-ending-sound" src="assets/audio/787691__danjfilms__screeching-saxophone-horror-screams.wav"></audio> 
-
   <script src="JS/game.js"></script>
 </body>
 </html>
