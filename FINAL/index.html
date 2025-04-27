@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whispers in the Hollow</title>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+  <!-- Title Screen -->
+  <div id="title-screen">
+    <div id="title-text">Whispers in the Hollow</div>
+    <button id="start-button">Start Game</button>
+  </div>
+
+  <!-- Game -->
+  <div id="game-container">
+    <div id="flash-overlay"></div>
+    <div id="dialogue-box">
+      <p id="dialogue-text"></p>
+      <div id="continue-hint">(Click to continue)</div>
+    </div>
+    <div id="choices"></div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div id="game-over-screen">
+    <div id="game-over-text">Game Over</div>
+    <button id="reset-button">Reset</button>
+  </div>
+
+  <!-- Audio -->
+  <audio id="bg-music" src="assets/audio/toybox.wav" loop></audio>
+  <audio id="creak-sound" src="assets/audio/footsteps-with-floor-creak-81239.mp3"></audio>
+  <audio id="whisper-sound" src="assets/audio/ghost-whispers-6030.mp3"></audio>
+  <audio id="monster-sound" src="assets/audio/deep-monster-growl-86780.mp3"></audio>
+  <audio id="scream-sound" src="assets/audio/782920__thesiege23e__genuine-horror-scream-2.mp3"></audio>
+  <audio id="fight-sound" src="assets/audio/215037__taira-komori__sword_battle_loop.mp3"></audio>
+  <audio id="escape-sound" src="assets/audio/383073__pfranzen__running-away-on-solid-floor.ogg"></audio>
+  <audio id="victory-sound" src="assets/audio/monumental-victory-114090.mp3"></audio>
+  <audio id="bad-ending-sound" src="assets/audio/787691__danjfilms__screeching-saxophone-horror-screams.wav"></audio>
+
+  <script src="JS/game.js"></script>
+</body>
+</html>

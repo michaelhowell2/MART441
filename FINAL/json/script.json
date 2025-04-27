@@ -1,0 +1,422 @@
+[
+  {
+    "background": "assets/imgs/Mansion.jpg",
+    "text": "You step into the abandoned mansion. The air is thick with dust, and the floor creaks under your weight.",
+    "speaker": null,
+    "sounds": ["creak"],
+    "choices": null,
+    "next": 1
+  },
+  {
+    "background": "assets/imgs/mansion-entryway.jpg",
+    "text": "A faint whisper echoes: \"You shouldn’t be here...\"",
+    "speaker": "Ghost",
+    "sounds": ["whisper"],
+    "choices": null,
+    "next": 2,
+    "effect": "fadeInGhost"
+  },
+  {
+    "background": "assets/imgs/hallway.png",
+    "text": "The ghost appears before you, translucent and sorrowful. \"The creature hunts these halls. You must choose your path.\"",
+    "speaker": "Ghost",
+    "sounds": [],
+    "choices": [
+      { "text": "Follow the ghost upstairs.", "next": 3 },
+      { "text": "Search the basement for a weapon.", "next": 5 },
+      { "text": "Explore the library for clues.", "next": 11 }
+    ]
+  },
+  {
+    "background": "assets/imgs/upstairs.jpg",
+    "text": "The ghost leads you to a locked room. \"The truth lies within, but it’s dangerous.\"",
+    "speaker": "Ghost",
+    "sounds": [],
+    "choices": null,
+    "next": 4
+  },
+  {
+    "background": "assets/imgs/attic-bedroom.png",
+    "text": "A guttural growl fills the air. The zombie bursts through the door!",
+    "speaker": null,
+    "sounds": ["monster"],
+    "choices": [
+      { "text": "Hide under the bed.", "next": 7 },
+      { "text": "Fight the zombie.", "next": 8 }
+    ],
+    "effect": "zombieAttack"
+  },
+  {
+    "background": "assets/imgs/basement.png",
+    "text": "The basement is damp and dark. You find a rusty axe, but footsteps echo above.",
+    "speaker": null,
+    "sounds": ["creak"],
+    "choices": null,
+    "next": 6
+  },
+  {
+    "background": "assets/imgs/zombieBasement.png",
+    "text": "The Creature descends the stairs, its eyes glowing. There’s nowhere to run!",
+    "speaker": null,
+    "sounds": ["monster"],
+    "choices": [
+      { "text": "Use the axe to fight.", "next": 9 },
+      { "text": "Try to sneak past.", "next": 39 }
+    ],
+    "effect": "zombieAttack"
+  },
+  {
+    "background": "assets/imgs/village-outskirts.jpg",
+    "text": "You sprint out of the mansion, leaving its horrors behind, and reach a peaceful village. [GOOD ENDING]",
+    "speaker": null,
+    "sounds": ["escape"],
+    "choices": null,
+    "isGoodEnding": true,
+    "next": null
+  },
+  {
+    "background": "assets/imgs/fightScene.png",
+    "text": "You swing desperately, but the Creature overpowers you. Darkness consumes you. [BAD ENDING]",
+    "speaker": null,
+    "sounds": ["scream"],
+    "choices": null,
+    "isGoodEnding": false,
+    "effect": "flicker-bad",
+    "next": null
+  },
+  {
+    "background": "assets/imgs/zombieBasement.png",
+    "text": "You battle the Creature in the basement’s gloom. It collapses, and the ghost whispers, \"The curse remains...\"",
+    "speaker": "Ghost",
+    "sounds": ["fight"],
+    "choices": null,
+    "next": 40,
+    "effect": "flicker"
+  },
+  {
+    "background": "assets/imgs/zombieBasement.png",
+    "text": "The Creature overpowers you. Your screams echo as darkness consumes you. [BAD ENDING]",
+    "speaker": null,
+    "sounds": ["scream"],
+    "choices": null,
+    "isGoodEnding": false,
+    "effect": "flicker-bad",
+    "next": null
+  },
+  {
+    "background": "assets/imgs/library.jpg",
+    "text": "The library is filled with dusty tomes. A journal catches your eye, hinting at a curse binding the mansion.",
+    "speaker": null,
+    "sounds": ["creak"],
+    "choices": [
+      { "text": "Read the journal.", "next": 12 },
+      { "text": "Search for a hidden passage.", "next": 13 },
+      { "text": "Flee the mansion.", "next": 40 }
+    ]
+  },
+  {
+    "background": "assets/imgs/tome.jpg",
+    "text": "The journal reveals a ritual in the garden to free the ghost’s soul, but it requires a rare herb.",
+    "speaker": null,
+    "sounds": ["whisper"],
+    "choices": [
+      { "text": "Head to the garden.", "next": 14 },
+      { "text": "Explore the kitchen for supplies.", "next": 16 }
+    ],
+    "effect": "fadeInGhost"
+  },
+  {
+    "background": "assets/imgs/hiddenpassage.jpg",
+    "text": "You find a hidden passage behind a bookshelf, leading to a suspicious-looking corridor.",
+    "speaker": null,
+    "sounds": ["creak"],
+    "choices": [
+      { "text": "Follow the corridor.", "next": 15 },
+      { "text": "Return to the hallway.", "next": 2 }
+    ]
+  },
+  {
+    "background": "assets/imgs/garden.png",
+    "text": "The garden is overgrown, but you spot the rare herb. A shadow moves in the mist.",
+    "speaker": null,
+    "sounds": ["monster"],
+    "choices": [
+      { "text": "Grab the herb and run.", "next": 19 },
+      { "text": "Confront the shadow.", "next": 20 }
+    ],
+    "effect": "zombieAttack"
+  },
+  {
+    "background": "assets/imgs/corridor.jpg",
+    "text": "The corridor ends at a locked door. You hear faint cries from the other side.",
+    "speaker": null,
+    "sounds": ["creak"],
+    "choices": [
+      { "text": "Try to break the door.", "next": 21 },
+      { "text": "Look for a key.", "next": 22 }
+    ]
+  },
+  {
+    "background": "assets/imgs/kitchenelena.png",
+    "text": "The kitchen is a mess, but you find a knife and some herbs. A survivor huddles in the corner.",
+    "speaker": null,
+    "sounds": [],
+    "choices": [
+      { "text": "Talk to the survivor.", "next": 23 },
+      { "text": "Ignore them and leave.", "next": 24 }
+    ],
+    "effect": "fadeInSurvivor"
+  },
+  {
+    "background": "assets/imgs/kitchenelena.png",
+    "text": "You grab the herbs and head to the garden, ignoring the survivor’s pleas.",
+    "speaker": null,
+    "sounds": [],
+    "choices": null,
+    "next": 14,
+    "effect": "fadeInSurvivor"
+  },
+  {
+    "background": "assets/imgs/kitchene2.png",
+    "text": "The survivor, Elena, begs you to help her escape. She knows the mansion’s secrets.",
+    "speaker": "Elena",
+    "sounds": [],
+    "choices": [
+      { "text": "Agree to help her.", "next": 25 },
+      { "text": "Refuse and leave.", "next": 17 }
+    ],
+    "effect": "fadeInSurvivor"
+  },
+  {
+    "background": "assets/imgs/gardenz.png",
+    "text": "You snatch the herb and sprint back inside, narrowly escaping the Creature.",
+    "speaker": null,
+    "sounds": ["escape"],
+    "choices": null,
+    "next": 26
+  },
+  {
+    "background": "assets/imgs/gardenz.png",
+    "text": "You confront the shadow—a massive Creature! It lunges at you.",
+    "speaker": null,
+    "sounds": ["monster"],
+    "choices": [
+      { "text": "Fight with the knife.", "next": 27 },
+      { "text": "Dodge and run.", "next": 19 }
+    ],
+    "effect": "zombieAttack"
+  },
+  {
+    "background": "assets/imgs/kitchenelena.png",
+    "text": "You break the door and find Elena, a survivor. She’s weak but grateful.",
+    "speaker": "Elena",
+    "sounds": [],
+    "choices": [
+      { "text": "Help her escape.", "next": 25 },
+      { "text": "Leave her behind.", "next": 28 }
+    ],
+    "effect": "fadeInSurvivor"
+  },
+  {
+    "background": "assets/imgs/corridorZ.png",
+    "text": "You find a rusty key in the shadows, but footsteps approach.",
+    "speaker": null,
+    "sounds": ["monster"],
+    "choices": [
+      { "text": "Unlock the door.", "next": 21 },
+      { "text": "Hide from the zombie.", "next": 29 }
+    ],
+    "effect": "zombieAttack"
+  },
+  {
+    "background": "assets/imgs/kitchene2.png",
+    "text": "Elena joins you, sharing a clue: the zombie is tied to a cursed artifact in the garden.",
+    "speaker": "Elena",
+    "sounds": [],
+    "choices": [
+      { "text": "Head to the garden.", "next": 14 },
+      { "text": "Search for more supplies.", "next": 30 }
+    ],
+    "effect": "fadeInSurvivor"
+  },
+  {
+    "background": "assets/imgs/hallway2.png",
+    "text": "You return to the hallway, the survivor’s cries echoing in your mind.",
+    "speaker": null,
+    "sounds": [],
+    "choices": [
+      { "text": "Go upstairs.", "next": 3 },
+      { "text": "Return to the basement.", "next": 5 }
+    ]
+  },
+  {
+    "background": "assets/imgs/kitchenelena.png",
+    "text": "Elena helps you find a potion recipe to weaken the Creature. You need herbs from the garden.",
+    "speaker": "Elena",
+    "sounds": [],
+    "choices": null,
+    "next": 14,
+    "effect": "fadeInSurvivor"
+  },
+  {
+    "background": "assets/imgs/library.jpg",
+    "text": "With the herb, you return to the library to prepare the ritual.",
+    "speaker": null,
+    "sounds": ["whisper"],
+    "choices": [
+      { "text": "Perform the ritual.", "next": 31 },
+      { "text": "Search for more clues.", "next": 32 }
+    ],
+    "effect": "fadeInGhost"
+  },
+  {
+    "background": "assets/imgs/gardenz.png",
+    "text": "You fight bravely, but the Creature’s strength overwhelms you. You barely escape.",
+    "speaker": null,
+    "sounds": ["fight"],
+    "choices": null,
+    "next": 19,
+    "effect": "flicker"
+  },
+  {
+    "background": "assets/imgs/hallway2.png",
+    "text": "You leave Elena behind, her cries fading as you return to the hallway.",
+    "speaker": null,
+    "sounds": [],
+    "choices": [
+      { "text": "Go upstairs.", "next": 3 },
+      { "text": "Return to the basement.", "next": 5 }
+    ]
+  },
+  {
+    "background": "assets/imgs/corridorZ.png",
+    "text": "You hide, but the Creature finds you. It’s a brutal fight!",
+    "speaker": null,
+    "sounds": ["fight"],
+    "choices": [
+      { "text": "Fight back.", "next": 33 },
+      { "text": "Run away.", "next": 28 }
+    ],
+    "effect": "flicker"
+  },
+  {
+    "background": "assets/imgs/kitchenz.png",
+    "text": "You find more supplies, but a Creature crashes through the door!",
+    "speaker": null,
+    "sounds": ["monster"],
+    "choices": [
+      { "text": "Fight with Elena.", "next": 34 },
+      { "text": "Flee to the garden.", "next": 14 }
+    ],
+    "effect": "zombieAttack"
+  },
+  {
+    "background": "assets/imgs/gardenlight.png",
+    "text": "You perform the ritual, and the ghost’s form glows brightly. \"You’ve freed me!\"",
+    "speaker": "Ghost",
+    "sounds": ["whisper"],
+    "choices": null,
+    "next": 37,
+    "effect": "fadeInGhost"
+  },
+  {
+    "background": "assets/imgs/library.jpg",
+    "text": "You find a map showing a safe path out of the mansion.",
+    "speaker": null,
+    "sounds": [],
+    "choices": [
+      { "text": "Follow the map.", "next": 36 },
+      { "text": "Return to the ritual.", "next": 31 }
+    ]
+  },
+  {
+    "background": "assets/imgs/corridorZ.png",
+    "text": "You defeat the Creature, but you’re wounded. You stumble back to the hallway.",
+    "speaker": null,
+    "sounds": ["fight"],
+    "choices": null,
+    "next": 28,
+    "effect": "flicker"
+  },
+  {
+    "background": "assets/imgs/kitchenz.png",
+    "text": "You and Elena fight off the Creature, strengthening your bond.",
+    "speaker": "Elena",
+    "sounds": ["fight"],
+    "choices": null,
+    "next": 35,
+    "effect": "flicker"
+  },
+  {
+    "background": "assets/imgs/garden.png",
+    "text": "Together, you and Elena reach the garden and prepare the ritual.",
+    "speaker": "Elena",
+    "sounds": ["whisper"],
+    "choices": null,
+    "next": 31,
+    "effect": "fadeInGhostAndSurvivor"
+  },
+  {
+    "background": "assets/imgs/village-outskirts.jpg",
+    "text": "Following the map, you escape the mansion’s cursed halls, emerging in a peaceful village far from its horrors. [HEROIC ENDING]",
+    "speaker": null,
+    "sounds": [],
+    "choices": null,
+    "isGoodEnding": true,
+    "next": null
+  },
+  {
+    "background": "assets/imgs/gardengone.png",
+    "text": "The ritual succeeds, and the ghost ascends in light destroying the monster within. You flee the mansion, finding peace beyond its walls. [REDEMPTION ENDING]",
+    "speaker": "Ghost",
+    "sounds": ["whisper"],
+    "choices": null,
+    "isGoodEnding": true,
+    "next": null,
+    "effect": "fadeInGhost"
+  },
+  {
+    "background": "assets/imgs/village-outskirts.jpg",
+    "text": "You and Elena flee the mansion together, reaching a village ready to face the world. [ALLIANCE ENDING]",
+    "speaker": "Elena",
+    "sounds": [],
+    "choices": null,
+    "isGoodEnding": true,
+    "next": null,
+    "effect": "fadeInSurvivor"
+  },
+
+  {
+    "background": "assets/imgs/zombieBasement.png",
+    "text": "The Creature overpowers you. Your screams echo as darkness consumes you. [BAD ENDING]",
+    "speaker": null,
+    "sounds": ["scream"],
+    "choices": null,
+    "isGoodEnding": false,
+    "effect": "flicker-bad",
+    "next": null
+  },
+  
+  {
+    "background": "assets/imgs/escape.png", 
+    "text": "You flee the mansion, but the outside world is a nightmare of decay and horror. The ghost’s voice echoes: ‘You’ll be back when you see what’s out there.’ [CATASTROPHIC ENDING]",
+    "speaker": "Ghost",
+    "sounds": ["whisper"],
+    "choices": null,
+    "isGoodEnding": false,
+    "effect": "flicker-bad",
+    "next": null
+  },
+  {
+    "background": "assets/imgs/village-outskirts.jpg",
+    "text": "With the Creature defeated, you escape the mansion’s darkness, emerging into the safety of a distant village. [GOOD ENDING]",
+    "speaker": null,
+    "sounds": [],
+    "choices": null,
+    "isGoodEnding": true,
+    "next": null
+  }
+
+
+  
+]
