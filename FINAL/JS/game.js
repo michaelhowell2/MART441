@@ -46,7 +46,7 @@ function detectDevice() {
   const isMobile = window.innerWidth <= 600 || 
                    ('ontouchstart' in window && navigator.maxTouchPoints > 0) ||
                    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  console.log(`Device detection: width=${window.innerWidth}, touch=${navigator.maxTouchPoints}, isMobile=${isMobile}`);
+  console.log(`Device detection: width=${window.innerWidth}, touch=${navigator.maxTouchPoints}, userAgent=${navigator.userAgent}, isMobile=${isMobile}`);
   return isMobile ? 'mobile' : 'pc';
 }
 
@@ -62,6 +62,7 @@ function applyDeviceMode(mode) {
 
 // Full-screen toggle
 function toggleFullScreen() {
+  console.log('Toggling full-screen');
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen().catch(err => {
       console.error('Failed to enter fullscreen:', err);
@@ -74,19 +75,23 @@ function toggleFullScreen() {
 }
 
 // Initialize device mode
-localStorage.removeItem('deviceMode'); // Clear to avoid stuck mobile setting
+localStorage.removeItem('deviceMode'); // Clear to avoid stuck settings
 const savedMode = localStorage.getItem('deviceMode') || 'auto';
 applyDeviceMode(savedMode);
 deviceMode.value = savedMode;
 
 // Settings panel handlers
-const toggleSettings = () => {
+const toggleSettings = (event) => {
+  event.preventDefault();
+  console.log('Touch/click detected on settingsButton');
   settingsPanel.style.display = settingsPanel.style.display === 'none' ? 'flex' : 'none';
 };
 settingsButton.addEventListener('click', toggleSettings);
 settingsButton.addEventListener('touchstart', toggleSettings);
 
-const saveSettingsHandler = () => {
+const saveSettingsHandler = (event) => {
+  event.preventDefault();
+  console.log('Touch/click detected on saveSettings');
   applyDeviceMode(deviceMode.value);
   settingsPanel.style.display = 'none';
 };
@@ -94,7 +99,9 @@ saveSettings.addEventListener('click', saveSettingsHandler);
 saveSettings.addEventListener('touchstart', saveSettingsHandler);
 
 // Full-screen handler
-const fullscreenHandler = () => {
+const fullscreenHandler = (event) => {
+  event.preventDefault();
+  console.log('Touch/click detected on fullscreenButton');
   toggleFullScreen();
 };
 fullscreenButton.addEventListener('click', fullscreenHandler);
@@ -181,8 +188,9 @@ function showChoices(choices) {
       const btn = document.createElement('button');
       btn.className = 'choice-btn';
       btn.textContent = choice.text;
-      const handler = () => {
-        console.log(`Choice clicked/tapped: ${choice.text}, next scene: ${choice.next}`);
+      const handler = (event) => {
+        event.preventDefault();
+        console.log(`Touch/click detected on choice-btn: ${choice.text}, next scene: ${choice.next}`);
         loadScene(choice.next);
       };
       btn.addEventListener('click', handler);
@@ -209,10 +217,13 @@ function debounceClick(handler) {
   return function(event) {
     const now = Date.now();
     if (now - lastClickTime < 100) {
-      console.log('Click/tap ignored due to debounce');
+      console.log(`Touch/click ignored: debounce, eventType=${event.type}`);
       return;
     }
     lastClickTime = now;
+    if (event.type === 'touchstart') {
+      event.preventDefault();
+    }
     handler(event);
   };
 }
@@ -263,15 +274,16 @@ function loadScene(sceneIndex) {
       dialogueBox.ontouchstart = null;
       setTimeout(() => {
         showChoices(scene.choices);
-        dialogueBox.onclick = debounceClick(() => {
+        const choiceHandler = debounceClick(() => {
           console.log('Dialogue box clicked/tapped, but choices are active');
         });
-        dialogueBox.ontouchstart = dialogueBox.onclick;
+        dialogueBox.onclick = choiceHandler;
+        dialogueBox.ontouchstart = choiceHandler;
       }, 800);
     } else {
-      const clickHandler = debounceClick(() => {
+      const clickHandler = debounceClick((event) => {
         if (typing || transitionLock) {
-          console.log('Click/tap ignored: typing or transitioning');
+          console.log(`Touch/click ignored: typing=${typing}, transitioning=${transitionLock}, eventType=${event.type}`);
           return;
         }
         if (scene.next !== undefined) {
@@ -318,8 +330,9 @@ function startGame() {
 }
 
 // Initialize
-const startHandler = () => {
-  toggleFullScreen(); // Enter full-screen on start
+const startHandler = (event) => {
+  event.preventDefault();
+  console.log('Touch/click detected on startButton');
   loadScript().then(() => {
     if (script.length === 0) {
       console.error('Game cannot start: script failed to load');
@@ -328,6 +341,7 @@ const startHandler = () => {
     }
     titleScreen.style.display = 'none';
     gameContainer.style.display = 'flex';
+    toggleFullScreen(); // Enter full-screen after game starts
     bgMusic.play().catch(err => console.log('Music blocked:', err));
     startGame();
   });
@@ -335,8 +349,10 @@ const startHandler = () => {
 startButton.addEventListener('click', startHandler);
 startButton.addEventListener('touchstart', startHandler);
 
-const resetHandler = () => {
-  toggleFullScreen(); // Re-enter full-screen on reset
+const resetHandler = (event) => {
+  event.preventDefault();
+  console.log('Touch/click detected on resetButton');
+  toggleFullScreen();
   victorySound.pause();
   badEndingSound.pause();
   victorySound.currentTime = 0;

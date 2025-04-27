@@ -64,6 +64,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+  z-index: 11; /* Ensure above other elements */
 }
 
 #device-mode {
@@ -98,6 +99,7 @@ html, body {
   text-align: center;
   z-index: 2;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y; /* Allow vertical scrolling */
 }
 
 #dialogue-text {
@@ -258,7 +260,7 @@ body[data-device="mobile"] #fullscreen-button,
 body[data-device="mobile"] #save-settings {
   font-size: 4vmin !important;
   padding: 1.5rem 2.5rem !important;
-  min-height: 4rem !important;
+  min-height: 4.5rem !important; /* Larger for touch */
 }
 body[data-device="mobile"] #dialogue-box {
   max-height: 50% !important;
@@ -278,7 +280,7 @@ body[data-device="mobile"] #choices {
 body[data-device="mobile"] .choice-btn {
   font-size: 3vmin !important;
   padding: 1.25rem !important;
-  min-height: 4rem !important;
+  min-height: 4.5rem !important;
 }
 body[data-device="mobile"] #settings-panel {
   padding: 1rem !important;
@@ -300,7 +302,7 @@ body[data-device="mobile"] #device-mode {
   body:not([data-device="pc"]) #save-settings {
     font-size: 4vmin;
     padding: 1.5rem 2.5rem;
-    min-height: 4rem;
+    min-height: 4.5rem;
   }
   body:not([data-device="pc"]) #dialogue-box {
     margin: 0.5rem;
@@ -320,7 +322,7 @@ body[data-device="mobile"] #device-mode {
   body:not([data-device="pc"]) .choice-btn {
     font-size: 3vmin;
     padding: 1.25rem;
-    min-height: 4rem;
+    min-height: 4.5rem;
   }
 }
 
@@ -336,6 +338,7 @@ body[data-device="mobile"] #device-mode {
   body:not([data-device="pc"]) #save-settings {
     font-size: 3.5vmin;
     padding: 1.25rem 2.25rem;
+    min-height: 3.5rem;
   }
   body:not([data-device="pc"]) #dialogue-box {
     margin: 0.75rem;
