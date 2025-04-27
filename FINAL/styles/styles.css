@@ -49,6 +49,8 @@ html, body {
   min-height: 3rem;
   transition: background 0.3s;
   margin: 0.5rem;
+  z-index: 12; /* Ensure buttons are touchable */
+  pointer-events: auto;
 }
 
 #start-button:hover, #reset-button:hover, #settings-button:hover, #fullscreen-button:hover, #save-settings:hover {
@@ -64,7 +66,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  z-index: 11; /* Ensure above other elements */
+  z-index: 11;
 }
 
 #device-mode {
@@ -99,7 +101,8 @@ html, body {
   text-align: center;
   z-index: 2;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y; /* Allow vertical scrolling */
+  touch-action: pan-y;
+  pointer-events: auto;
 }
 
 #dialogue-text {
@@ -139,6 +142,8 @@ html, body {
   min-height: 3rem;
   touch-action: manipulation;
   transition: background 0.3s;
+  z-index: 12;
+  pointer-events: auto;
 }
 
 .choice-btn:hover {
@@ -260,7 +265,7 @@ body[data-device="mobile"] #fullscreen-button,
 body[data-device="mobile"] #save-settings {
   font-size: 4vmin !important;
   padding: 1.5rem 2.5rem !important;
-  min-height: 4.5rem !important; /* Larger for touch */
+  min-height: 5rem !important;
 }
 body[data-device="mobile"] #dialogue-box {
   max-height: 50% !important;
@@ -280,7 +285,7 @@ body[data-device="mobile"] #choices {
 body[data-device="mobile"] .choice-btn {
   font-size: 3vmin !important;
   padding: 1.25rem !important;
-  min-height: 4.5rem !important;
+  min-height: 5rem !important;
 }
 body[data-device="mobile"] #settings-panel {
   padding: 1rem !important;
@@ -302,7 +307,7 @@ body[data-device="mobile"] #device-mode {
   body:not([data-device="pc"]) #save-settings {
     font-size: 4vmin;
     padding: 1.5rem 2.5rem;
-    min-height: 4.5rem;
+    min-height: 5rem;
   }
   body:not([data-device="pc"]) #dialogue-box {
     margin: 0.5rem;
@@ -322,7 +327,7 @@ body[data-device="mobile"] #device-mode {
   body:not([data-device="pc"]) .choice-btn {
     font-size: 3vmin;
     padding: 1.25rem;
-    min-height: 4.5rem;
+    min-height: 5rem;
   }
 }
 

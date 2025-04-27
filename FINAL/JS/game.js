@@ -83,29 +83,29 @@ deviceMode.value = savedMode;
 // Settings panel handlers
 const toggleSettings = (event) => {
   event.preventDefault();
-  console.log('Touch/click detected on settingsButton');
+  console.log(`Touch/click detected on settingsButton, eventType=${event.type}`);
   settingsPanel.style.display = settingsPanel.style.display === 'none' ? 'flex' : 'none';
 };
 settingsButton.addEventListener('click', toggleSettings);
-settingsButton.addEventListener('touchstart', toggleSettings);
+settingsButton.addEventListener('touchstart', toggleSettings, { passive: false });
 
 const saveSettingsHandler = (event) => {
   event.preventDefault();
-  console.log('Touch/click detected on saveSettings');
+  console.log(`Touch/click detected on saveSettings, eventType=${event.type}`);
   applyDeviceMode(deviceMode.value);
   settingsPanel.style.display = 'none';
 };
 saveSettings.addEventListener('click', saveSettingsHandler);
-saveSettings.addEventListener('touchstart', saveSettingsHandler);
+saveSettings.addEventListener('touchstart', saveSettingsHandler, { passive: false });
 
 // Full-screen handler
 const fullscreenHandler = (event) => {
   event.preventDefault();
-  console.log('Touch/click detected on fullscreenButton');
+  console.log(`Touch/click detected on fullscreenButton, eventType=${event.type}`);
   toggleFullScreen();
 };
 fullscreenButton.addEventListener('click', fullscreenHandler);
-fullscreenButton.addEventListener('touchstart', fullscreenHandler);
+fullscreenButton.addEventListener('touchstart', fullscreenHandler, { passive: false });
 
 async function loadScript() {
   try {
@@ -190,11 +190,11 @@ function showChoices(choices) {
       btn.textContent = choice.text;
       const handler = (event) => {
         event.preventDefault();
-        console.log(`Touch/click detected on choice-btn: ${choice.text}, next scene: ${choice.next}`);
+        console.log(`Touch/click detected on choice-btn: ${choice.text}, next scene: ${choice.next}, eventType=${event.type}`);
         loadScene(choice.next);
       };
       btn.addEventListener('click', handler);
-      btn.addEventListener('touchstart', handler);
+      btn.addEventListener('touchstart', handler, { passive: false });
       choicesDiv.appendChild(btn);
     });
   }
@@ -287,11 +287,14 @@ function loadScene(sceneIndex) {
           return;
         }
         if (scene.next !== undefined) {
+          console.log(`Dialogue box touch/click advancing to scene: ${scene.next}`);
           loadScene(scene.next);
         }
       });
       dialogueBox.onclick = clickHandler;
       dialogueBox.ontouchstart = clickHandler;
+      dialogueBox.addEventListener('click', clickHandler);
+      dialogueBox.addEventListener('touchstart', clickHandler, { passive: false });
     }
 
     fadeIn();
@@ -332,7 +335,7 @@ function startGame() {
 // Initialize
 const startHandler = (event) => {
   event.preventDefault();
-  console.log('Touch/click detected on startButton');
+  console.log(`Start button touch/click detected, eventType=${event.type}, device=${document.body.getAttribute('data-device')}`);
   loadScript().then(() => {
     if (script.length === 0) {
       console.error('Game cannot start: script failed to load');
@@ -341,18 +344,18 @@ const startHandler = (event) => {
     }
     titleScreen.style.display = 'none';
     gameContainer.style.display = 'flex';
-    toggleFullScreen(); // Enter full-screen after game starts
+    setTimeout(toggleFullScreen, 100); // Delay full-screen to avoid touch conflicts
     bgMusic.play().catch(err => console.log('Music blocked:', err));
     startGame();
   });
 };
 startButton.addEventListener('click', startHandler);
-startButton.addEventListener('touchstart', startHandler);
+startButton.addEventListener('touchstart', startHandler, { passive: false });
 
 const resetHandler = (event) => {
   event.preventDefault();
-  console.log('Touch/click detected on resetButton');
-  toggleFullScreen();
+  console.log(`Touch/click detected on resetButton, eventType=${event.type}`);
+  setTimeout(toggleFullScreen, 100);
   victorySound.pause();
   badEndingSound.pause();
   victorySound.currentTime = 0;
@@ -366,4 +369,4 @@ const resetHandler = (event) => {
   startGame();
 };
 resetButton.addEventListener('click', resetHandler);
-resetButton.addEventListener('touchstart', resetHandler);
+resetButton.addEventListener('touchstart', resetHandler, { passive: false });
