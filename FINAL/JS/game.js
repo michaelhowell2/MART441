@@ -1,5 +1,10 @@
 const titleScreen = document.getElementById('title-screen');
 const startButton = document.getElementById('start-button');
+const settingsButton = document.getElementById('settings-button');
+const fullscreenButton = document.getElementById('fullscreen-button');
+const settingsPanel = document.getElementById('settings-panel');
+const deviceMode = document.getElementById('device-mode');
+const saveSettings = document.getElementById('save-settings');
 const gameContainer = document.getElementById('game-container');
 const flashOverlay = document.getElementById('flash-overlay');
 const dialogueBox = document.getElementById('dialogue-box');
@@ -20,9 +25,10 @@ const resetButton = document.getElementById('reset-button');
 
 let currentScene = 0;
 let typing = false;
-let transitionLock = false; // New flag to lock during transitions
-let lastClickTime = 0; // For debouncing clicks
-let typingTimeout = null; // To track typing timeout
+let transitionLock = false;
+let lastClickTime = 0;
+let typingTimeout = null;
+let script = [];
 
 const soundMap = {
   creak: creakSound,
@@ -34,6 +40,65 @@ const soundMap = {
   victory: victorySound,
   badEnding: badEndingSound
 };
+
+// Device detection
+function detectDevice() {
+  const isMobile = window.innerWidth <= 600 || 
+                   ('ontouchstart' in window && navigator.maxTouchPoints > 0) ||
+                   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  console.log(`Device detection: width=${window.innerWidth}, touch=${navigator.maxTouchPoints}, isMobile=${isMobile}`);
+  return isMobile ? 'mobile' : 'pc';
+}
+
+// Apply device mode
+function applyDeviceMode(mode) {
+  if (mode === 'auto') {
+    mode = detectDevice();
+  }
+  console.log(`Applying device mode: ${mode}`);
+  document.body.setAttribute('data-device', mode);
+  localStorage.setItem('deviceMode', mode);
+}
+
+// Full-screen toggle
+function toggleFullScreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => {
+      console.error('Failed to enter fullscreen:', err);
+    });
+  } else {
+    document.exitFullscreen().catch(err => {
+      console.error('Failed to exit fullscreen:', err);
+    });
+  }
+}
+
+// Initialize device mode
+localStorage.removeItem('deviceMode'); // Clear to avoid stuck mobile setting
+const savedMode = localStorage.getItem('deviceMode') || 'auto';
+applyDeviceMode(savedMode);
+deviceMode.value = savedMode;
+
+// Settings panel handlers
+const toggleSettings = () => {
+  settingsPanel.style.display = settingsPanel.style.display === 'none' ? 'flex' : 'none';
+};
+settingsButton.addEventListener('click', toggleSettings);
+settingsButton.addEventListener('touchstart', toggleSettings);
+
+const saveSettingsHandler = () => {
+  applyDeviceMode(deviceMode.value);
+  settingsPanel.style.display = 'none';
+};
+saveSettings.addEventListener('click', saveSettingsHandler);
+saveSettings.addEventListener('touchstart', saveSettingsHandler);
+
+// Full-screen handler
+const fullscreenHandler = () => {
+  toggleFullScreen();
+};
+fullscreenButton.addEventListener('click', fullscreenHandler);
+fullscreenButton.addEventListener('touchstart', fullscreenHandler);
 
 async function loadScript() {
   try {
@@ -92,7 +157,7 @@ function typeText(text, callback) {
   let i = 0;
   typing = true;
   if (typingTimeout) {
-    clearTimeout(typingTimeout); // Clear any existing typing timeout
+    clearTimeout(typingTimeout);
   }
   function type() {
     if (i < text.length) {
@@ -116,21 +181,23 @@ function showChoices(choices) {
       const btn = document.createElement('button');
       btn.className = 'choice-btn';
       btn.textContent = choice.text;
-      btn.onclick = () => {
-        console.log(`Choice clicked: ${choice.text}, next scene: ${choice.next}`);
+      const handler = () => {
+        console.log(`Choice clicked/tapped: ${choice.text}, next scene: ${choice.next}`);
         loadScene(choice.next);
       };
+      btn.addEventListener('click', handler);
+      btn.addEventListener('touchstart', handler);
       choicesDiv.appendChild(btn);
     });
   }
 }
 
 function fadeOut(callback, isGameOver = false) {
-  transitionLock = true; // Lock during transition
+  transitionLock = true;
   gameContainer.style.opacity = 0;
   setTimeout(() => {
     callback();
-    transitionLock = false; // Unlock after transition
+    transitionLock = false;
   }, isGameOver ? 5000 : 1000);
 }
 
@@ -138,12 +205,11 @@ function fadeIn() {
   gameContainer.style.opacity = 1;
 }
 
-// Debounce function to limit rapid clicks
 function debounceClick(handler) {
   return function(event) {
     const now = Date.now();
-    if (now - lastClickTime < 100) { // 100ms debounce window
-      console.log('Click ignored due to debounce');
+    if (now - lastClickTime < 100) {
+      console.log('Click/tap ignored due to debounce');
       return;
     }
     lastClickTime = now;
@@ -193,24 +259,27 @@ function loadScene(sceneIndex) {
     }
 
     if (scene.choices) {
-      dialogueBox.onclick = null; // Disable click handler during choice display
+      dialogueBox.onclick = null;
+      dialogueBox.ontouchstart = null;
       setTimeout(() => {
         showChoices(scene.choices);
-        // Re-enable click handler only for non-choice actions
         dialogueBox.onclick = debounceClick(() => {
-          console.log('Dialogue box clicked, but choices are active');
+          console.log('Dialogue box clicked/tapped, but choices are active');
         });
+        dialogueBox.ontouchstart = dialogueBox.onclick;
       }, 800);
     } else {
-      dialogueBox.onclick = debounceClick(() => {
+      const clickHandler = debounceClick(() => {
         if (typing || transitionLock) {
-          console.log('Click ignored: typing or transitioning');
+          console.log('Click/tap ignored: typing or transitioning');
           return;
         }
         if (scene.next !== undefined) {
           loadScene(scene.next);
         }
       });
+      dialogueBox.onclick = clickHandler;
+      dialogueBox.ontouchstart = clickHandler;
     }
 
     fadeIn();
@@ -249,20 +318,25 @@ function startGame() {
 }
 
 // Initialize
-startButton.onclick = async () => {
-  await loadScript();
-  if (script.length === 0) {
-    console.error('Game cannot start: script failed to load');
-    alert('Game cannot start: script failed to load. Please check json/script.json.');
-    return;
-  }
-  titleScreen.style.display = 'none';
-  gameContainer.style.display = 'flex';
-  bgMusic.play().catch(err => console.log('Music blocked:', err));
-  startGame();
+const startHandler = () => {
+  toggleFullScreen(); // Enter full-screen on start
+  loadScript().then(() => {
+    if (script.length === 0) {
+      console.error('Game cannot start: script failed to load');
+      alert('Game cannot start: script failed to load. Please check json/script.json.');
+      return;
+    }
+    titleScreen.style.display = 'none';
+    gameContainer.style.display = 'flex';
+    bgMusic.play().catch(err => console.log('Music blocked:', err));
+    startGame();
+  });
 };
+startButton.addEventListener('click', startHandler);
+startButton.addEventListener('touchstart', startHandler);
 
-resetButton.onclick = () => {
+const resetHandler = () => {
+  toggleFullScreen(); // Re-enter full-screen on reset
   victorySound.pause();
   badEndingSound.pause();
   victorySound.currentTime = 0;
@@ -275,3 +349,5 @@ resetButton.onclick = () => {
   currentScene = 0;
   startGame();
 };
+resetButton.addEventListener('click', resetHandler);
+resetButton.addEventListener('touchstart', resetHandler);

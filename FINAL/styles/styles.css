@@ -1,16 +1,28 @@
-body {
+html, body {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   background: black;
   color: white;
   font-family: 'Courier New', monospace;
   user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.game-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  max-width: 100%;
 }
 
 #title-screen {
   position: absolute;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: black;
   display: flex;
   flex-direction: column;
@@ -20,30 +32,52 @@ body {
 }
 
 #title-text {
-  font-size: 48px;
-  margin-bottom: 40px;
+  font-size: 6vmin;
+  margin-bottom: 2rem;
   color: #ff5555;
-  text-shadow: 0 0 10px #ff5555;
+  text-shadow: 0 0 1rem #ff5555;
 }
 
-#start-button {
-  font-size: 24px;
-  padding: 15px 30px;
+#start-button, #reset-button, #settings-button, #fullscreen-button, #save-settings {
+  font-size: 3vmin;
+  padding: 1rem 2rem;
   border: 2px solid #ff5555;
   background: none;
   color: white;
   cursor: pointer;
+  touch-action: manipulation;
+  min-height: 3rem;
   transition: background 0.3s;
+  margin: 0.5rem;
 }
 
-#start-button:hover {
+#start-button:hover, #reset-button:hover, #settings-button:hover, #fullscreen-button:hover, #save-settings:hover {
   background: #550000;
+}
+
+#settings-panel {
+  background: rgba(0, 0, 0, 0.9);
+  padding: 1rem;
+  border: 2px solid #ff5555;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#device-mode {
+  font-size: 2.5vmin;
+  padding: 0.5rem;
+  background: #550000;
+  color: white;
+  border: 1px solid #ff5555;
 }
 
 #game-container {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-size: cover;
   background-position: center;
   display: flex;
@@ -56,25 +90,26 @@ body {
 
 #dialogue-box {
   background: rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  margin: 20px;
+  padding: 1rem;
+  margin: 1rem;
   border: 2px solid #ff5555;
-  max-height: 30%;
+  max-height: 40%;
   overflow-y: auto;
   text-align: center;
   z-index: 2;
+  -webkit-overflow-scrolling: touch;
 }
 
 #dialogue-text {
-  font-size: 18px;
+  font-size: 2.5vmin;
   line-height: 1.5;
   color: #ffcccc;
 }
 
 #continue-hint {
-  font-size: 12px;
+  font-size: 1.5vmin;
   color: #888;
-  margin-top: 10px;
+  margin-top: 0.5rem;
   opacity: 0;
   animation: blink 1s infinite alternate;
 }
@@ -87,8 +122,8 @@ body {
 #choices {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin: 20px;
+  gap: 0.5rem;
+  margin: 1rem;
   z-index: 2;
 }
 
@@ -96,9 +131,11 @@ body {
   background: #550000;
   color: white;
   border: 2px solid #ff5555;
-  padding: 10px;
+  padding: 1rem;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 2vmin;
+  min-height: 3rem;
+  touch-action: manipulation;
   transition: background 0.3s;
 }
 
@@ -108,8 +145,8 @@ body {
 
 #game-over-screen {
   position: absolute;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: black;
   display: none;
   flex-direction: column;
@@ -119,24 +156,10 @@ body {
 }
 
 #game-over-text {
-  font-size: 48px;
-  margin-bottom: 40px;
+  font-size: 6vmin;
+  margin-bottom: 2rem;
   color: #ff5555;
-  text-shadow: 0 0 10px #ff5555;
-}
-
-#reset-button {
-  font-size: 24px;
-  padding: 15px 30px;
-  border: 2px solid #ff5555;
-  background: none;
-  color: white;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-#reset-button:hover {
-  background: #550000;
+  text-shadow: 0 0 1rem #ff5555;
 }
 
 .flicker {
@@ -161,8 +184,8 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: rgba(255, 0, 0, 0);
   pointer-events: none;
   z-index: 0;
@@ -184,4 +207,150 @@ body {
 @keyframes flash-red-bad {
   0% { background: rgba(255, 0, 0, 0); }
   100% { background: rgba(255, 0, 0, 0.4); }
+}
+
+/* PC-specific styles */
+body[data-device="pc"] #title-text,
+body[data-device="pc"] #game-over-text {
+  font-size: 5vmin !important;
+}
+body[data-device="pc"] #start-button,
+body[data-device="pc"] #reset-button,
+body[data-device="pc"] #settings-button,
+body[data-device="pc"] #fullscreen-button,
+body[data-device="pc"] #save-settings {
+  font-size: 2.5vmin !important;
+  padding: 0.75rem 1.5rem !important;
+  min-height: 2.5rem !important;
+}
+body[data-device="pc"] #dialogue-box {
+  max-height: 35% !important;
+  margin: 1.5rem !important;
+  padding: 1.5rem !important;
+}
+body[data-device="pc"] #dialogue-text {
+  font-size: 2vmin !important;
+}
+body[data-device="pc"] #continue-hint {
+  font-size: 1.2vmin !important;
+}
+body[data-device="pc"] .choice-btn {
+  font-size: 1.8vmin !important;
+  padding: 0.75rem !important;
+  min-height: 2.5rem !important;
+}
+body[data-device="pc"] #settings-panel {
+  padding: 1.5rem !important;
+}
+body[data-device="pc"] #device-mode {
+  font-size: 2vmin !important;
+}
+
+/* Mobile-specific styles */
+body[data-device="mobile"] #title-text,
+body[data-device="mobile"] #game-over-text {
+  font-size: 8vmin !important;
+}
+body[data-device="mobile"] #start-button,
+body[data-device="mobile"] #reset-button,
+body[data-device="mobile"] #settings-button,
+body[data-device="mobile"] #fullscreen-button,
+body[data-device="mobile"] #save-settings {
+  font-size: 4vmin !important;
+  padding: 1.5rem 2.5rem !important;
+  min-height: 4rem !important;
+}
+body[data-device="mobile"] #dialogue-box {
+  max-height: 50% !important;
+  margin: 0.5rem !important;
+  padding: 0.75rem !important;
+}
+body[data-device="mobile"] #dialogue-text {
+  font-size: 3.5vmin !important;
+}
+body[data-device="mobile"] #continue-hint {
+  font-size: 2vmin !important;
+}
+body[data-device="mobile"] #choices {
+  margin: 0.5rem !important;
+  gap: 0.75rem !important;
+}
+body[data-device="mobile"] .choice-btn {
+  font-size: 3vmin !important;
+  padding: 1.25rem !important;
+  min-height: 4rem !important;
+}
+body[data-device="mobile"] #settings-panel {
+  padding: 1rem !important;
+}
+body[data-device="mobile"] #device-mode {
+  font-size: 3vmin !important;
+}
+
+/* Media query fallbacks */
+@media screen and (max-width: 600px) {
+  body:not([data-device="pc"]) #title-text,
+  body:not([data-device="pc"]) #game-over-text {
+    font-size: 8vmin;
+  }
+  body:not([data-device="pc"]) #start-button,
+  body:not([data-device="pc"]) #reset-button,
+  body:not([data-device="pc"]) #settings-button,
+  body:not([data-device="pc"]) #fullscreen-button,
+  body:not([data-device="pc"]) #save-settings {
+    font-size: 4vmin;
+    padding: 1.5rem 2.5rem;
+    min-height: 4rem;
+  }
+  body:not([data-device="pc"]) #dialogue-box {
+    margin: 0.5rem;
+    padding: 0.75rem;
+    max-height: 50%;
+  }
+  body:not([data-device="pc"]) #dialogue-text {
+    font-size: 3.5vmin;
+  }
+  body:not([data-device="pc"]) #continue-hint {
+    font-size: 2vmin;
+  }
+  body:not([data-device="pc"]) #choices {
+    margin: 0.5rem;
+    gap: 0.75rem;
+  }
+  body:not([data-device="pc"]) .choice-btn {
+    font-size: 3vmin;
+    padding: 1.25rem;
+    min-height: 4rem;
+  }
+}
+
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+  body:not([data-device="pc"]) #title-text,
+  body:not([data-device="pc"]) #game-over-text {
+    font-size: 7vmin;
+  }
+  body:not([data-device="pc"]) #start-button,
+  body:not([data-device="pc"]) #reset-button,
+  body:not([data-device="pc"]) #settings-button,
+  body:not([data-device="pc"]) #fullscreen-button,
+  body:not([data-device="pc"]) #save-settings {
+    font-size: 3.5vmin;
+    padding: 1.25rem 2.25rem;
+  }
+  body:not([data-device="pc"]) #dialogue-box {
+    margin: 0.75rem;
+    padding: 1rem;
+    max-height: 45%;
+  }
+  body:not([data-device="pc"]) #dialogue-text {
+    font-size: 3vmin;
+  }
+  body:not([data-device="pc"]) #continue-hint {
+    font-size: 1.75vmin;
+  }
+  body:not([data-device="pc"]) .choice-btn {
+    font-size: 2.5vmin;
+    padding: 1rem;
+    min-height: 3.5rem;
+  }
 }
