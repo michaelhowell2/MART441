@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Whispers in the Hollow</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
@@ -12,7 +13,7 @@
     <button id="start-button">Start Game</button>
   </div>
 
-  <!-- Game -->
+  <!-- Game Container -->
   <div id="game-container">
     <div id="flash-overlay"></div>
     <div id="dialogue-box">
@@ -37,8 +38,8 @@
   <audio id="fight-sound" src="assets/audio/215037__taira-komori__sword_battle_loop.mp3"></audio>
   <audio id="escape-sound" src="assets/audio/383073__pfranzen__running-away-on-solid-floor.ogg"></audio>
   <audio id="victory-sound" src="assets/audio/monumental-victory-114090.mp3"></audio>
-  <audio id="bad-ending-sound" src="assets/audio/787691__danjfilms__screeching-saxophone-horror-screams.wav"></audio> 
+  <audio id="bad-ending-sound" src="assets/audio/787691__danjfilms__screeching-saxophone-horror-screams.wav"></audio>
 
-  <script src="JS/game.js"></script>
+  <script src="JS/game.js" defer></script>
 </body>
 </html>

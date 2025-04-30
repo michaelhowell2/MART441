@@ -56,6 +56,16 @@ async function loadScript() {
   }
 }
 
+function preloadImages() {
+  script.forEach(scene => {
+    if (scene.background) {
+      const img = new Image();
+      img.src = scene.background;
+    }
+  });
+}
+
+
 function playSound(soundName) {
   const sound = soundMap[soundName];
   if (sound) {
@@ -248,6 +258,7 @@ function startGame() {
 // Initialize
 startButton.onclick = async () => {
   await loadScript();
+  preloadImages(); 
   if (script.length === 0) {
     console.error('Game cannot start: script failed to load');
     alert('Game cannot start: script failed to load. Please check json/script.json.');
@@ -258,6 +269,7 @@ startButton.onclick = async () => {
   bgMusic.play().catch(err => console.log('Music blocked:', err));
   startGame();
 };
+
 
 resetButton.onclick = () => {
   victorySound.pause();

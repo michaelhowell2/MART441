@@ -1,12 +1,15 @@
-body {
+html, body {
   margin: 0;
+  padding: 0;
   overflow: hidden;
   background: black;
   color: white;
   font-family: 'Courier New', monospace;
   user-select: none;
+  height: 100%;
 }
 
+/* Title screen */
 #title-screen {
   position: absolute;
   width: 100vw;
@@ -35,25 +38,26 @@ body {
   cursor: pointer;
   transition: background 0.3s;
 }
-
 #start-button:hover {
   background: #550000;
 }
 
+/* Game container */
 #game-container {
   position: relative;
   width: 100vw;
   height: 100vh;
+  background-color: black;
   background-size: cover;
   background-position: center;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: flex-end;
   opacity: 1;
   transition: opacity 1s ease;
-  display: none;
 }
 
+/* Dialogue box */
 #dialogue-box {
   background: rgba(0, 0, 0, 0.8);
   padding: 20px;
@@ -78,12 +82,12 @@ body {
   opacity: 0;
   animation: blink 1s infinite alternate;
 }
-
 @keyframes blink {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
+/* Choices */
 #choices {
   display: flex;
   flex-direction: column;
@@ -91,7 +95,6 @@ body {
   margin: 20px;
   z-index: 2;
 }
-
 .choice-btn {
   background: #550000;
   color: white;
@@ -101,11 +104,11 @@ body {
   font-size: 16px;
   transition: background 0.3s;
 }
-
 .choice-btn:hover {
   background: #aa0000;
 }
 
+/* Game over screen */
 #game-over-screen {
   position: absolute;
   width: 100vw;
@@ -117,14 +120,12 @@ body {
   align-items: center;
   z-index: 10;
 }
-
 #game-over-text {
   font-size: 48px;
   margin-bottom: 40px;
   color: #ff5555;
   text-shadow: 0 0 10px #ff5555;
 }
-
 #reset-button {
   font-size: 24px;
   padding: 15px 30px;
@@ -134,53 +135,46 @@ body {
   cursor: pointer;
   transition: background 0.3s;
 }
-
 #reset-button:hover {
   background: #550000;
 }
 
+/* Flicker effects */
 .flicker {
   animation: flicker 0.25s infinite alternate;
 }
-
 @keyframes flicker {
   0% { opacity: 1; }
-  100% { opacity: 0; }
+  100% { opacity: 0.8; }
 }
-
 .flicker-bad {
   animation: flicker-bad 0.3s infinite alternate;
 }
-
 @keyframes flicker-bad {
   0% { opacity: 1; }
-  100% { opacity: 0; }
+  100% { opacity: 0.6; }
 }
 
+/* Flash overlay */
 #flash-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   width: 100vw;
   height: 100vh;
   background: rgba(255, 0, 0, 0);
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
-
 .flash-red {
   animation: flash-red 0.25s infinite alternate;
 }
-
 @keyframes flash-red {
   0% { background: rgba(255, 0, 0, 0); }
   100% { background: rgba(255, 0, 0, 0.5); }
 }
-
 .flash-red-bad {
   animation: flash-red-bad 0.3s infinite alternate;
 }
-
 @keyframes flash-red-bad {
   0% { background: rgba(255, 0, 0, 0); }
   100% { background: rgba(255, 0, 0, 0.4); }
