@@ -24,7 +24,6 @@ let transitionLock = false;
 let lastClickTime = 0;
 let typingTimeout = null;
 let script = [];
-let repoBasePath = ''; // Set dynamically for GitHub Pages
 
 const soundMap = {
   creak: creakSound,
@@ -33,8 +32,8 @@ const soundMap = {
   scream: screamSound,
   fight: fightSound,
   escape: escapeSound,
-  'victory-sound': victorySound,
-  'bad-ending': badEndingSound
+  victory: victorySound,
+  badEnding: badEndingSound
 };
 
 async function loadScript() {
@@ -57,55 +56,10 @@ async function loadScript() {
   }
 }
 
-async function preloadImages() {
-  // Detect GitHub Pages base path (e.g., '/[repo]')
-  const isGitHubPages = window.location.hostname.endsWith('github.io');
-  repoBasePath = isGitHubPages ? `/${window.location.pathname.split('/')[1]}` : '';
-  console.log(`Detected base path: ${repoBasePath}`);
-
-  const imagePromises = script
-    .filter(scene => scene.background)
-    .map(scene => {
-      return new Promise((resolve) => {
-        const img = new Image();
-        const imgPath = repoBasePath + '/' + scene.background;
-        img.src = imgPath;
-        img.onload = () => {
-          console.log(`Preloaded: ${imgPath}`);
-          resolve();
-        };
-        img.onerror = () => {
-          console.warn(`Failed to preload image: ${imgPath}`);
-          resolve(); // Continue even if an image fails
-        };
-      });
-    });
-  await Promise.all(imagePromises);
-  console.log('All background images preloaded');
-}
-
 function playSound(soundName) {
   const sound = soundMap[soundName];
   if (sound) {
     sound.play().catch(err => console.log(`Sound ${soundName} failed:`, err));
-  } else {
-    console.warn(`Sound ${soundName} not found in soundMap`);
-  }
-}
-
-function stopAllSounds() {
-  console.log('Stopping all sounds');
-  Object.values(soundMap).forEach(sound => {
-    if (sound) {
-      console.log(`Stopping ${sound.id}`);
-      sound.pause();
-      sound.currentTime = 0;
-    }
-  });
-  if (bgMusic) {
-    console.log('Stopping bgMusic');
-    bgMusic.pause();
-    bgMusic.currentTime = 0;
   }
 }
 
@@ -127,7 +81,7 @@ function applyEffect(effectType) {
     }, 4000);
   } else if (effectType === 'zombieAttack') {
     playSound('monster');
-  } else if (effectType === 'fadeInGhost' || effectType === 'fadeInGhostAndSurvivor' || effectType === 'fadeInSurvivor') {
+  } else if (effectType === 'fadeInGhost' || effectType === 'fadeInGhostAndSurvivor') {
     playSound('whisper');
   }
 }
@@ -148,23 +102,10 @@ function typeText(text, callback) {
       typing = false;
       typingTimeout = null;
       continueHint.style.opacity = 1;
-      dialogueBox.onclick = null; // Clear temporary handler
       if (callback) callback();
     }
   }
   type();
-  // Temporary handler to skip typing
-  dialogueBox.onclick = debounceClick(() => {
-    if (typing) {
-      clearTimeout(typingTimeout);
-      dialogueText.textContent = text;
-      typing = false;
-      typingTimeout = null;
-      continueHint.style.opacity = 1;
-      dialogueBox.onclick = null; // Clear handler
-      if (callback) callback();
-    }
-  });
 }
 
 function showChoices(choices) {
@@ -185,14 +126,11 @@ function showChoices(choices) {
 
 function fadeOut(callback, isGameOver = false) {
   transitionLock = true;
-  console.log('Fade out started');
-  const startTime = performance.now();
   gameContainer.style.opacity = 0;
   setTimeout(() => {
-    console.log(`Fade out completed in ${performance.now() - startTime}ms`);
     callback();
     transitionLock = false;
-  }, 1000);
+  }, isGameOver ? 5000 : 1000);
 }
 
 function fadeIn() {
@@ -200,33 +138,18 @@ function fadeIn() {
 }
 
 function debounceClick(handler) {
-  return function(event) {
+  return function (event) {
     const now = Date.now();
     if (now - lastClickTime < 100) {
       console.log('Click ignored due to debounce');
       return;
     }
     lastClickTime = now;
-    console.log('Click detected, currentScene:', currentScene, 'typing:', typing, 'transitionLock:', transitionLock);
     handler(event);
   };
 }
 
-async function loadImage(src) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.src = src;
-    img.onload = () => resolve();
-    img.onerror = () => {
-      console.warn(`Failed to load image: ${src}`);
-      resolve(); // Continue even if image fails
-    };
-    // Timeout after 3s to avoid hanging on slow networks
-    setTimeout(resolve, 3000);
-  });
-}
-
-async function loadScene(sceneIndex) {
+function loadScene(sceneIndex) {
   console.log(`Loading scene: ${sceneIndex}`);
   if (!script || script.length === 0) {
     console.error('Script is empty or not loaded. Cannot load scene:', sceneIndex);
@@ -243,14 +166,11 @@ async function loadScene(sceneIndex) {
   }
   currentScene = sceneIndex;
   continueHint.style.opacity = 0;
-  dialogueBox.onclick = null; // Clear any existing handler
 
-  fadeOut(async () => {
+  fadeOut(() => {
     try {
-      const imgPath = repoBasePath + '/' + scene.background;
-      console.log(`Loading background: ${imgPath}`);
-      await loadImage(imgPath); // Wait for image to load
-      document.getElementById('background-layer').style.backgroundImage = `url(${imgPath})`;
+      console.log(`Setting background: ${scene.background}`);
+      gameContainer.style.backgroundImage = `url(${scene.background})`;
     } catch (err) {
       console.warn(`Failed to load background image: ${scene.background}`, err);
     }
@@ -259,20 +179,6 @@ async function loadScene(sceneIndex) {
     typeText(scene.speaker ? `${scene.speaker}: ${scene.text}` : scene.text, () => {
       if (scene.isGoodEnding !== undefined && scene.next === null) {
         setTimeout(showGameOver, 3000);
-      } else if (scene.choices) {
-        showChoices(scene.choices);
-        dialogueBox.onclick = debounceClick(() => {
-          console.log('Dialogue box clicked, but choices are active');
-        });
-      } else if (scene.next !== undefined) {
-        dialogueBox.onclick = debounceClick(() => {
-          if (!typing && !transitionLock) {
-            console.log(`Advancing to scene: ${scene.next}`);
-            loadScene(scene.next);
-          } else {
-            console.log('Click ignored: typing=', typing, 'transitionLock=', transitionLock);
-          }
-        });
       }
     });
 
@@ -282,6 +188,26 @@ async function loadScene(sceneIndex) {
 
     if (scene.sounds) {
       scene.sounds.forEach(playSound);
+    }
+
+    if (scene.choices) {
+      dialogueBox.onclick = null;
+      setTimeout(() => {
+        showChoices(scene.choices);
+        dialogueBox.onclick = debounceClick(() => {
+          console.log('Dialogue box clicked, but choices are active');
+        });
+      }, 800);
+    } else {
+      dialogueBox.onclick = debounceClick(() => {
+        if (typing || transitionLock) {
+          console.log('Click ignored: typing or transitioning');
+          return;
+        }
+        if (scene.next !== undefined) {
+          loadScene(scene.next);
+        }
+      });
     }
 
     fadeIn();
@@ -295,15 +221,18 @@ function showGameOver() {
   }
   const scene = script[currentScene];
   console.log(`Showing game over, isGoodEnding: ${scene.isGoodEnding}`);
-  stopAllSounds(); // Stop all sounds before playing ending sound
   if (scene.isGoodEnding) {
+    bgMusic.pause();
     victorySound.play().catch(err => console.log('Victory sound blocked:', err));
   } else {
+    bgMusic.pause();
     badEndingSound.play().catch(err => console.log('Bad ending sound blocked:', err));
   }
+  gameContainer.style.transition = 'opacity 5s ease';
   fadeOut(() => {
     gameContainer.style.display = 'none';
     gameOverScreen.style.display = 'flex';
+    gameContainer.style.transition = 'opacity 1s ease';
   }, true);
 }
 
@@ -313,8 +242,6 @@ function startGame() {
     alert('Cannot start game: script is not loaded. Please check json/script.json.');
     return;
   }
-  stopAllSounds(); // Ensure no sounds are playing
-  bgMusic.play().catch(err => console.log('Music blocked:', err));
   loadScene(0);
 }
 
@@ -326,20 +253,22 @@ startButton.onclick = async () => {
     alert('Game cannot start: script failed to load. Please check json/script.json.');
     return;
   }
-  await preloadImages();
   titleScreen.style.display = 'none';
   gameContainer.style.display = 'flex';
+  bgMusic.play().catch(err => console.log('Music blocked:', err));
   startGame();
 };
 
 resetButton.onclick = () => {
-  console.log('Resetting game, clearing background');
-  stopAllSounds(); // Stop all sounds before resetting
-  document.getElementById('background-layer').style.backgroundImage = ''; // Clear background
+  victorySound.pause();
+  badEndingSound.pause();
+  victorySound.currentTime = 0;
+  badEndingSound.currentTime = 0;
+  bgMusic.play().catch(err => console.log('Music blocked:', err));
   gameOverScreen.style.display = 'none';
   gameContainer.style.display = 'flex';
+  gameContainer.style.transition = 'opacity 1s ease';
+  gameContainer.style.opacity = 1;
   currentScene = 0;
-  typing = false;
-  transitionLock = false;
   startGame();
 };
