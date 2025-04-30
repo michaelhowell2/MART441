@@ -1,1 +1,1 @@
-Final Project for MART 441 by Michael Howell " Whispers In The Hollow" An interactive Horror story. Asssets aquired from twitch and freesound.org from various artists.
+Final Project for MART 441 by Michael Howell " Whispers In The Hollow" An interactive Horror story. Asssets aquired from twitch and freesound.org from various artists. Had Chat GPT assist with  debugging and other issues I encoutered like sound loading and event handling.

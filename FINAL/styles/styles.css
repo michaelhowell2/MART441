@@ -5,7 +5,7 @@ body {
   color: white;
   font-family: 'Courier New', monospace;
   user-select: none;
-}
+}   
 
 #title-screen {
   position: absolute;
@@ -44,14 +44,24 @@ body {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background-size: cover;
-  background-position: center;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   opacity: 1;
   transition: opacity 1s ease;
   display: none;
+}
+
+#background-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  transition: opacity 1s ease;
 }
 
 #dialogue-box {
