@@ -41,7 +41,7 @@
     "speaker": null,
     "sounds": ["monster"],
     "choices": [
-      { "text": "Hide under the bed.", "next": 7 },
+      { "text": "Hide under the bed.", "next": 42 },
       { "text": "Fight the zombie.", "next": 8 }
     ],
     "effect": "zombieAttack"
@@ -67,12 +67,13 @@
   },
   {
     "background": "assets/imgs/village-outskirts.jpg",
-    "text": "You sprint out of the mansion, leaving its horrors behind, and reach a peaceful village. [GOOD ENDING]",
+    "text": "You sprint out of the mansion, leaving its horrors behind, and reach a peaceful village. As you escape, the ghost’s whisper lingers: ‘The curse remains, but you are free.’ [GOOD ENDING]",
     "speaker": null,
-    "sounds": ["escape"],
+    "sounds": ["escape", "whisper"],
     "choices": null,
     "isGoodEnding": true,
-    "next": null
+    "next": null,
+    "effect": "fadeInGhost"
   },
   {
     "background": "assets/imgs/fightScene.png",
@@ -86,11 +87,11 @@
   },
   {
     "background": "assets/imgs/zombieBasement.png",
-    "text": "You battle the Creature in the basement’s gloom. It collapses, and the ghost whispers, \"The curse remains...\"",
-    "speaker": "Ghost",
-    "sounds": ["fight"],
+    "text": "You swing the axe wildly, barely holding off the Creature. You narrowly escape, stumbling back to the entryway. The Creature’s roar follows you up the stairs.",
+    "speaker": null,
+    "sounds": ["fight", "escape"],
     "choices": null,
-    "next": 40,
+    "next": 1,
     "effect": "flicker"
   },
   {
@@ -105,7 +106,7 @@
   },
   {
     "background": "assets/imgs/library.jpg",
-    "text": "The library is filled with dusty tomes. A journal catches your eye, hinting at a curse binding the mansion.",
+    "text": "The library is filled with dusty tomes. A journal catches your eye, hinting at a curse binding the mansion, perhaps threatening the world beyond.",
     "speaker": null,
     "sounds": ["creak"],
     "choices": [
@@ -169,7 +170,7 @@
   },
   {
     "background": "assets/imgs/kitchenelena.png",
-    "text": "You grab the herbs and head to the garden, ignoring the survivor’s pleas.",
+    "text": "You grab the herbs and head to the garden, ignoring the survivor’s pleas. A distant scream suggests Elena’s grim fate.",
     "speaker": null,
     "sounds": [],
     "choices": null,
@@ -241,7 +242,7 @@
   },
   {
     "background": "assets/imgs/hallway2.png",
-    "text": "You return to the hallway, the survivor’s cries echoing in your mind.",
+    "text": "You return to the hallway, the survivor’s cries echoing in your mind. A distant scream suggests Elena’s grim fate.",
     "speaker": null,
     "sounds": [],
     "choices": [
@@ -280,7 +281,7 @@
   },
   {
     "background": "assets/imgs/hallway2.png",
-    "text": "You leave Elena behind, her cries fading as you return to the hallway.",
+    "text": "You leave Elena behind, her cries fading as you return to the hallway. A distant scream suggests Elena’s grim fate.",
     "speaker": null,
     "sounds": [],
     "choices": [
@@ -358,12 +359,13 @@
   },
   {
     "background": "assets/imgs/village-outskirts.jpg",
-    "text": "Following the map, you escape the mansion’s cursed halls, emerging in a peaceful village far from its horrors. [HEROIC ENDING]",
+    "text": "Following the map, you escape the mansion’s cursed halls, emerging in a peaceful village far from its horrors. The ghost’s whisper lingers: ‘The curse remains, but you are free.’ [HEROIC ENDING]",
     "speaker": null,
-    "sounds": [],
+    "sounds": ["whisper"],
     "choices": null,
     "isGoodEnding": true,
-    "next": null
+    "next": null,
+    "effect": "fadeInGhost"
   },
   {
     "background": "assets/imgs/gardengone.png",
@@ -377,18 +379,17 @@
   },
   {
     "background": "assets/imgs/village-outskirts.jpg",
-    "text": "You and Elena flee the mansion together, reaching a village ready to face the world. [ALLIANCE ENDING]",
+    "text": "You and Elena flee the mansion together, reaching a village ready to face the world. The ghost’s whisper lingers: ‘The curse remains, but you are free.’ [ALLIANCE ENDING]",
     "speaker": "Elena",
-    "sounds": [],
+    "sounds": ["whisper"],
     "choices": null,
     "isGoodEnding": true,
     "next": null,
-    "effect": "fadeInSurvivor"
+    "effect": "fadeInGhost"
   },
-
   {
     "background": "assets/imgs/zombieBasement.png",
-    "text": "The Creature overpowers you. Your screams echo as darkness consumes you. [BAD ENDING]",
+    "text": "You slip past, but the Creature catches your scent, dragging you into darkness. [BAD ENDING]",
     "speaker": null,
     "sounds": ["scream"],
     "choices": null,
@@ -396,9 +397,8 @@
     "effect": "flicker-bad",
     "next": null
   },
-  
   {
-    "background": "assets/imgs/escape.png", 
+    "background": "assets/imgs/escape.png",
     "text": "You flee the mansion, but the outside world is a nightmare of decay and horror. The ghost’s voice echoes: ‘You’ll be back when you see what’s out there.’ [CATASTROPHIC ENDING]",
     "speaker": "Ghost",
     "sounds": ["whisper"],
@@ -409,14 +409,20 @@
   },
   {
     "background": "assets/imgs/village-outskirts.jpg",
-    "text": "With the Creature defeated, you escape the mansion’s darkness, emerging into the safety of a distant village. [GOOD ENDING]",
-    "speaker": null,
-    "sounds": [],
+    "text": "With the Creature’s body behind you, you escape the mansion’s darkness, emerging into the safety of a distant village. The ghost’s whisper lingers: ‘The curse remains, but you are free.’ [GOOD ENDING]",
+    "speaker": "Ghost",
+    "sounds": ["whisper"],
     "choices": null,
     "isGoodEnding": true,
-    "next": null
+    "next": null,
+    "effect": "fadeInGhost"
+  },
+  {
+    "background": "assets/imgs/bedroom.jpg",
+    "text": "You slide under the bed, heart pounding. The zombie’s heavy steps echo, then fade as it leaves the room. You seize your chance to escape, but its distant growl echoes as you flee.",
+    "speaker": null,
+    "sounds": ["creak"],
+    "choices": null,
+    "next": 7
   }
-
-
-  
 ]
