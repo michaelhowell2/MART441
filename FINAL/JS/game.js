@@ -24,6 +24,7 @@ let transitionLock = false;
 let lastClickTime = 0;
 let typingTimeout = null;
 let script = [];
+let repoBasePath = ''; // Set dynamically for GitHub Pages
 
 const soundMap = {
   creak: creakSound,
@@ -57,15 +58,24 @@ async function loadScript() {
 }
 
 async function preloadImages() {
+  // Detect GitHub Pages base path (e.g., '/[repo]')
+  const isGitHubPages = window.location.hostname.endsWith('github.io');
+  repoBasePath = isGitHubPages ? `/${window.location.pathname.split('/')[1]}` : '';
+  console.log(`Detected base path: ${repoBasePath}`);
+
   const imagePromises = script
     .filter(scene => scene.background)
     .map(scene => {
       return new Promise((resolve) => {
         const img = new Image();
-        img.src = scene.background;
-        img.onload = resolve;
+        const imgPath = repoBasePath + '/' + scene.background;
+        img.src = imgPath;
+        img.onload = () => {
+          console.log(`Preloaded: ${imgPath}`);
+          resolve();
+        };
         img.onerror = () => {
-          console.warn(`Failed to preload image: ${scene.background}`);
+          console.warn(`Failed to preload image: ${imgPath}`);
           resolve(); // Continue even if an image fails
         };
       });
@@ -202,7 +212,21 @@ function debounceClick(handler) {
   };
 }
 
-function loadScene(sceneIndex) {
+async function loadImage(src) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => resolve();
+    img.onerror = () => {
+      console.warn(`Failed to load image: ${src}`);
+      resolve(); // Continue even if image fails
+    };
+    // Timeout after 3s to avoid hanging on slow networks
+    setTimeout(resolve, 3000);
+  });
+}
+
+async function loadScene(sceneIndex) {
   console.log(`Loading scene: ${sceneIndex}`);
   if (!script || script.length === 0) {
     console.error('Script is empty or not loaded. Cannot load scene:', sceneIndex);
@@ -221,10 +245,12 @@ function loadScene(sceneIndex) {
   continueHint.style.opacity = 0;
   dialogueBox.onclick = null; // Clear any existing handler
 
-  fadeOut(() => {
+  fadeOut(async () => {
     try {
-      console.log(`Setting background: ${scene.background}`);
-      document.getElementById('background-layer').style.backgroundImage = `url(${scene.background})`;
+      const imgPath = repoBasePath + '/' + scene.background;
+      console.log(`Loading background: ${imgPath}`);
+      await loadImage(imgPath); // Wait for image to load
+      document.getElementById('background-layer').style.backgroundImage = `url(${imgPath})`;
     } catch (err) {
       console.warn(`Failed to load background image: ${scene.background}`, err);
     }

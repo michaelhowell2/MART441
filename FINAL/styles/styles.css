@@ -60,6 +60,7 @@ body {
   height: 100%;
   background-size: cover;
   background-position: center;
+  background-color: black; /* Fallback to mask white flash */
   z-index: 1;
   transition: opacity 1s ease;
 }
