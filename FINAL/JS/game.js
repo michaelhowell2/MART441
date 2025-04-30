@@ -138,7 +138,7 @@ function fadeIn() {
 }
 
 function debounceClick(handler) {
-  return function (event) {
+  return function(event) {
     const now = Date.now();
     if (now - lastClickTime < 100) {
       console.log('Click ignored due to debounce');
