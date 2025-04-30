@@ -18,7 +18,7 @@
   },
   {
     "background": "assets/imgs/hallway.png",
-    "text": "The ghost appears before you, translucent and sorrowful. \"The creature hunts these halls. You must choose your path.\"",
+    "text": "The ghost appears before you, translucent and sorrowful. \"The Creature hunts these halls. You must choose your path.\"",
     "speaker": "Ghost",
     "sounds": [],
     "choices": [
@@ -37,7 +37,7 @@
   },
   {
     "background": "assets/imgs/attic-bedroom.png",
-    "text": "A guttural growl fills the air. The zombie bursts through the door!",
+    "text": "A guttural growl fills the air. The Creature bursts through the door!",
     "speaker": null,
     "sounds": ["monster"],
     "choices": [
@@ -231,7 +231,7 @@
   },
   {
     "background": "assets/imgs/kitchene2.png",
-    "text": "Elena joins you, sharing a clue: the zombie is tied to a cursed artifact in the garden.",
+    "text": "Elena joins you, sharing a clue: The Creature is tied to a cursed artifact in the garden.",
     "speaker": "Elena",
     "sounds": [],
     "choices": [
@@ -302,7 +302,7 @@
   },
   {
     "background": "assets/imgs/kitchenz.png",
-    "text": "You find more supplies, but a Creature crashes through the door!",
+    "text": "You find more supplies, but The Creature crashes through the door!",
     "speaker": null,
     "sounds": ["monster"],
     "choices": [
